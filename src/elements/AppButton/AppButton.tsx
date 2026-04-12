@@ -47,7 +47,7 @@ export function AppButton({
   const ButtonComponent = ButtonComponents[type];
 
   return (
-    <ButtonComponent accessibilityRole="button" {...props}>
+    <ButtonComponent testID="app-button" {...props}>
       <View
         style={[
           {

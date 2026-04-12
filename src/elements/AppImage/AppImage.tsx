@@ -15,10 +15,15 @@ interface AppImageProps extends ImageProps {
 
 export function AppImage({ source, style, ...rest }: AppImageProps) {
   return (
-    <TouchableOpacity onPress={rest.onpress} disabled={!rest.onpress}>
+    <TouchableOpacity
+      testID="app-image"
+      onPress={rest.onpress}
+      disabled={!rest.onpress}
+    >
       <Image
+        testID="app-image-component"
         source={source || no_image}
-        style={[{ width: 200, height: 200, resizeMode: 'contain' }, style]}
+        style={[{ width: 200, height: 200, resizeMode: 'contain', ...style }]}
         {...rest}
       />
     </TouchableOpacity>

@@ -39,6 +39,7 @@ export function AppIcon({
 
   return (
     <TouchableOpacity
+      testID="app-icon-touchable"
       style={{ margin: 10 }}
       onPress={onPress}
       disabled={!onPress}

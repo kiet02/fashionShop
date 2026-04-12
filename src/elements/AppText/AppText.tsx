@@ -1,8 +1,10 @@
+import React from 'react';
 import {
   StyleSheet,
   Text,
   TextProps,
   TouchableOpacity,
+  View,
   ViewStyle,
 } from 'react-native';
 import { AppIcon, IconConfig } from '../AppIcon';
@@ -31,37 +33,68 @@ export function AppText({
   onPress,
   ...rest
 }: AppTextProps) {
+  const Container = onPress ? TouchableOpacity : View;
   return (
-    <TouchableOpacity
+    <Container
+      testID="app-text-container"
       onPress={onPress}
+      activeOpacity={0.7}
       disabled={!onPress}
       style={[styles.container, containerStyle]}
     >
+      {/* Icon trái hoặc Icon nhấn được bên trái */}
       {icon ? (
-        <TouchableOpacity onPress={onpressIconLeft} disabled={!onpressIconLeft}>
-          <AppIcon icon={icon} size={20} color="#000" />
-        </TouchableOpacity>
+        <View style={styles.iconWrapper}>
+          <AppIcon
+            onPress={onpressIconLeft}
+            icon={icon}
+            size={20}
+            color="#000"
+          />
+        </View>
       ) : (
-        iconLeft && <AppIcon icon={iconLeft} size={20} color="#000" />
+        iconLeft && (
+          <View style={styles.iconWrapper}>
+            <AppIcon icon={iconLeft} size={20} color="#000" />
+          </View>
+        )
       )}
-      <Text style={[style]} {...rest}>
+
+      {/* Phần Text chiếm không gian ở giữa */}
+      <Text testID="app-text-content" style={[styles.text, style]} {...rest}>
         {text || 'AppText'}
       </Text>
+
+      {/* Icon bên phải */}
       {iconRight && (
-        <TouchableOpacity
-          onPress={onpressIconRight}
-          disabled={!onpressIconRight}
-        >
-          <AppIcon icon={iconRight} size={20} color="#000" />
-        </TouchableOpacity>
+        <View style={styles.iconWrapper}>
+          <AppIcon
+            onPress={onpressIconRight}
+            icon={iconRight}
+            size={20}
+            color="#000"
+          />
+        </View>
       )}
-    </TouchableOpacity>
+    </Container>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 8,
+  },
+  text: {
+    flex: 1, // Để Text đẩy các icon ra hai đầu nếu cần
+    fontSize: 16,
+    color: '#000',
+  },
+  iconWrapper: {
+    // Đảm bảo vùng nhấn của icon đủ lớn (ít nhất 44x44 theo tiêu chuẩn)
+    // nhưng không làm hỏng layout của hàng
+    justifyContent: 'center',
     alignItems: 'center',
   },
 });
