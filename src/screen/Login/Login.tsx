@@ -11,15 +11,22 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { getLoginSchema } from '../../utils/helper/rule';
 import { useNavigation } from '@react-navigation/native';
 import { NavigationStackProps } from '../../navigation/type';
+import { supabase } from '../../utils/fetchApi/supabase/supabase';
+
+
+type LoginFormData = {
+  email: string;
+  password: string;
+};
 
 export function Login() {
   const { color } = useAppTheme();
   const { language } = useAppLanguage();
   const navigation = useNavigation<NavigationStackProps>();
-  const { control, handleSubmit } = useForm<{
-    email: string;
-    password: string;
-  }>({
+
+  
+
+  const { control, handleSubmit } = useForm<LoginFormData>({
     resolver: yupResolver(getLoginSchema(language)),
     defaultValues: {
       email: '',
@@ -27,8 +34,25 @@ export function Login() {
     },
   });
 
-  const onLogin = (data: any) => {
-    console.log('Dữ liệu đăng nhập:', data);
+  const onLogin = async (data: LoginFormData) => {
+   if (!supabase) {
+     throw new Error('Supabase client chưa được khởi tạo thành công.');
+   }
+   try {
+     const { data: authData, error } = await supabase.auth.signInWithPassword({
+       email: data.email,
+       password: data.password,
+     });
+     if (error) {
+       throw error;
+     }
+     console.log(authData);
+     
+     return authData;
+   } catch (error: any) {
+     console.error('Login Process Error:', error.message);
+     throw error;
+   }
   };
 
   const toRegister = () => {
