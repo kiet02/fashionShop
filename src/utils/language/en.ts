@@ -1,4 +1,11 @@
-const EN = {
+import { VN } from './vn';
+
+const EN: typeof VN = {
+  bottomTab: {
+    home: 'Home',
+    cart: 'Cart',
+    profile: 'Profile',
+  },
   login: {
     title: 'Login',
     emailPlaceholder: 'Email',
@@ -34,6 +41,24 @@ const EN = {
       passwordConfirmRequired: 'Confirm Password is required',
       passwordMismatch: 'Passwords do not match',
       passwordMin: 'Password must be at least 6 characters',
+    },
+  },
+  home: {
+    bannerTitle: 'Step into Style:\nYour Fashion Destination',
+    bannerButton: 'Explore Now',
+    footer: {
+      shipping: {
+        title: 'Giao hàng toàn quốc',
+        desc: 'Vận chuyển nhanh chóng và an toàn đến tận tay bạn trong vòng 2-5 ngày làm việc.',
+      },
+      secure: {
+        title: 'Bảo mật thanh toán',
+        desc: 'Chúng tôi cam kết bảo mật thông tin thanh toán của khách hàng một cách tuyệt đối.',
+      },
+      support: {
+        title: 'Hỗ trợ 24/7',
+        desc: 'Đội ngũ chăm sóc khách hàng luôn sẵn sàng giải đáp mọi thắc mắc của bạn.',
+      },
     },
   },
 };

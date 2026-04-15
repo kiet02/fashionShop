@@ -7,7 +7,8 @@ const SIZE = {
   width: (percentage: number) => wp(percentage),
   height: (percentage: number) => hp(percentage),
   font: (percentage: number) => hp(percentage),
-
+  WIDTH_DEVICE: wp(100),
+  HEIGHT_DEVICE: hp(100),
   TEXTSIZE12: 12,
   TEXTSIZE14: 14,
   TEXTSIZE16: 16,

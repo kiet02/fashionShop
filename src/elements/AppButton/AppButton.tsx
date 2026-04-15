@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {
   TouchableOpacity,
@@ -13,6 +14,7 @@ import {
   ViewStyle,
   TextStyle,
 } from 'react-native';
+import { AppIcon, IconConfig } from '../AppIcon';
 
 // Phân tách Props để TypeScript hỗ trợ gợi ý code chính xác theo từng "type"
 type AppButtonProps =

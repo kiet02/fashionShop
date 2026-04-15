@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
   },
   loginRow: {
     flexDirection: 'row',
-    marginTop: 30,
+    marginTop: 20,
     justifyContent: 'center',
     gap: 6,
   },

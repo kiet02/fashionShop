@@ -12,6 +12,7 @@ import { getLoginSchema } from '../../utils/helper/rule';
 import { useNavigation } from '@react-navigation/native';
 import { NavigationStackProps } from '../../navigation/type';
 import { supabase } from '../../utils/fetchApi/supabase/supabase';
+import { useState } from 'react';
 
 
 type LoginFormData = {
@@ -23,6 +24,7 @@ export function Login() {
   const { color } = useAppTheme();
   const { language } = useAppLanguage();
   const navigation = useNavigation<NavigationStackProps>();
+ const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   
 
@@ -47,7 +49,7 @@ export function Login() {
        throw error;
      }
      console.log(authData);
-     
+     navigation.navigate('BottomNavigation');
      return authData;
    } catch (error: any) {
      console.error('Login Process Error:', error.message);
@@ -91,10 +93,14 @@ export function Login() {
         control={control}
         name="password"
         iconLeft={{ type: 'MaterialIcons', name: 'lock' }}
-        iconRight={{ type: 'MaterialIcons', name: 'lock' }}
+        iconRight={{
+          type: 'MaterialIcons',
+          name: showConfirmPassword ? 'visibility' : 'visibility-off',
+        }}
+        secureTextEntry={!showConfirmPassword}
+        onPressIconRight={() => setShowConfirmPassword(!showConfirmPassword)}
         sizeIcon={20}
         placeholder={language.login.passwordPlaceholder || 'Password'}
-        secureTextEntry
         containerStyle={{ marginBottom: 20 }}
       />
 

@@ -1,4 +1,10 @@
 const VN = {
+  bottomTab: {
+    home: 'Trang chủ',
+    cart: 'Giỏ hàng',
+    profile: 'Hồ sơ',
+  },
+
   login: {
     title: 'Đăng nhập',
     emailPlaceholder: 'Email',
@@ -34,6 +40,24 @@ const VN = {
       passwordMismatch: 'Mật khẩu nhập lại không khớp',
       passwordRequired: 'Mật khẩu không được để trống',
       passwordMin: 'Mật khẩu phải có ít nhất 6 ký tự',
+    },
+  },
+  home: {
+    bannerTitle: 'Bước theo Phong Cách:\nĐiểm đến thời trang của bạn',
+    bannerButton: 'Khám phá ngay',
+    footer: {
+      shipping: {
+        title: 'Giao hàng toàn quốc',
+        desc: 'Vận chuyển nhanh chóng và an toàn đến tận tay bạn trong vòng 2-5 ngày làm việc.',
+      },
+      secure: {
+        title: 'Bảo mật thanh toán',
+        desc: 'Chúng tôi cam kết bảo mật thông tin thanh toán của khách hàng một cách tuyệt đối.',
+      },
+      support: {
+        title: 'Hỗ trợ 24/7',
+        desc: 'Đội ngũ chăm sóc khách hàng luôn sẵn sàng giải đáp mọi thắc mắc của bạn.',
+      },
     },
   },
 };
