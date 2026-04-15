@@ -1,50 +1,64 @@
-import React from 'react';
-import { StyleProp, TouchableOpacity, ViewStyle } from 'react-native';
-
-import MaterialIconsglymaps from 'react-native-vector-icons/glyphmaps/MaterialIcons.json';
-import EvilIconsglymaps from 'react-native-vector-icons/glyphmaps/EvilIcons.json';
-import FontAwesomeglymaps from 'react-native-vector-icons/glyphmaps/FontAwesome.json';
+import React, { memo } from 'react';
+import {
+  StyleProp,
+  TouchableOpacity,
+  ViewStyle,
+} from 'react-native';
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
+const IconSets = {
+  MaterialIcons,
+  EvilIcons,
+  FontAwesome,
+};
+
 export type IconConfig =
-  | { type: 'MaterialIcons'; name: keyof typeof MaterialIconsglymaps }
-  | { type: 'EvilIcons'; name: keyof typeof EvilIconsglymaps }
-  | { type: 'FontAwesome'; name: keyof typeof FontAwesomeglymaps };
+  | { type: 'MaterialIcons'; name: string }
+  | { type: 'EvilIcons'; name: string }
+  | { type: 'FontAwesome'; name: string };
 
 interface AppIconProps {
   icon: IconConfig;
   size?: number;
   color?: string;
-  style?: StyleProp<ViewStyle>;
+  containerStyle?: StyleProp<ViewStyle>;
+  iconStyle?: any;
   onPress?: () => void;
 }
 
-export function AppIcon({
-  icon,
-  size = 24,
-  color = '#000',
-  style,
-  onPress,
-}: AppIconProps) {
-  const IconSets = {
-    MaterialIcons,
-    EvilIcons,
-    FontAwesome,
-  };
+export const AppIcon = memo(
+  ({
+    icon,
+    size = 24,
+    color = '#000',
+    containerStyle,
+    iconStyle,
+    onPress,
+  }: AppIconProps) => {
+    const IconComponent = IconSets[icon.type];
 
-  const IconComponent = IconSets[icon.type] as any;
+    const content = (
+      <IconComponent
+        name={icon.name}
+        size={size}
+        color={color}
+        style={iconStyle}
+      />
+    );
 
-  return (
-    <TouchableOpacity
-      testID="app-icon-touchable"
-      style={{ margin: 10 }}
-      onPress={onPress}
-      disabled={!onPress}
-    >
-      <IconComponent name={icon.name} size={size} color={color} style={style} />
-    </TouchableOpacity>
-  );
-}
+    return (
+      <TouchableOpacity
+        testID="app-icon-touchable"
+        style={containerStyle}
+        onPress={onPress}
+        disabled={!onPress}
+        activeOpacity={0.7}
+      >
+        {content}
+      </TouchableOpacity>
+    );
+  },
+);

@@ -89,8 +89,9 @@ export function Login() {
 
       <AppTextInput
         control={control}
-        name="password" // Bắt buộc phải có
-        iconLeft={{ type: 'MaterialIcons', name: 'lock' }} // password thường dùng icon lock
+        name="password"
+        iconLeft={{ type: 'MaterialIcons', name: 'lock' }}
+        iconRight={{ type: 'MaterialIcons', name: 'lock' }}
         sizeIcon={20}
         placeholder={language.login.passwordPlaceholder || 'Password'}
         secureTextEntry
@@ -99,7 +100,7 @@ export function Login() {
 
       <AppButton
         title={language.login.loginButton}
-        style={{
+        containerStyle={{
           backgroundColor: color.base,
           width: 340,
           justifyContent: 'center',

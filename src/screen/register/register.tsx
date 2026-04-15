@@ -118,7 +118,7 @@ export function Register() {
           title={language.register.registerButton}
           onPress={handleSubmit(onRegister)}
           disabled={!isValid || !acceptedTerms || isSubmitting}
-          style={{
+          containerStyle={{
             backgroundColor:
               !isValid || !acceptedTerms ? color.border : color.base,
             justifyContent: 'center',

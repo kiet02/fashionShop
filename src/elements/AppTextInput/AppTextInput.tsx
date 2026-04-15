@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import {
   StyleProp,
+  StyleSheet,
   TextInput,
   TextInputProps,
   TextStyle,
@@ -30,14 +31,28 @@ interface AppTextInputProps<T extends FieldValues> extends TextInputProps {
 }
 
 export function AppTextInput<T extends FieldValues>({
-  ...props
+  title,
+  isRequired,
+  disabled,
+  control,
+  name,
+  containerStyle,
+  inputStyle,
+  iconLeft,
+  iconRight,
+  sizeIcon,
+  sizeIconRight,
+  sizeIconLeft,
+  onPressIconLeft,
+  onPressIconRight,
+  ...textInputProps 
 }: AppTextInputProps<T>) {
   const { color } = useAppTheme();
 
   return (
     <Controller
-      control={props.control}
-      name={props.name}
+      control={control}
+      name={name}
       render={({
         field: { onChange, onBlur, value },
         fieldState: { error },
@@ -45,97 +60,73 @@ export function AppTextInput<T extends FieldValues>({
         <View
           testID="text-input-container"
           style={[
-            { marginBottom: 16, opacity: props.disabled ? 0.6 : 1 },
-            props.containerStyle,
+            { marginBottom: 16, opacity: disabled ? 0.7 : 1 },
+            containerStyle,
           ]}
-          pointerEvents={props.disabled ? 'none' : 'auto'}
         >
-          {props.title && (
-            <View
-              style={{
-                flexDirection: 'row',
-                marginBottom: 6,
-                alignItems: 'center',
-              }}
-            >
+          {title && (
+            <View style={styles.labelContainer}>
               <AppText
-                text={props.title}
-                style={{ color: color.text, fontSize: 14, fontWeight: '600' }}
+                text={title}
+                style={[styles.labelText, { color: color.text }]}
               />
-              {props.isRequired && (
-                <AppText
-                  text=" *"
-                  style={{ color: color.error, fontWeight: '700' }}
-                />
+              {isRequired && (
+                <AppText text=" *" style={{ color: color.error }} />
               )}
             </View>
           )}
 
           <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              width: '100%',
-              height: 50,
-              borderRadius: 10,
-              borderWidth: 1,
-              borderColor: error ? color.error : color.border,
-              backgroundColor: props.disabled ? color.border : color.card,
-            }}
+            style={[
+              styles.inputWrapper,
+              {
+                borderColor: error ? color.error : color.border,
+                backgroundColor: disabled ? color.border : color.card,
+              },
+            ]}
           >
-            {props.iconLeft && (
+            {iconLeft && (
               <AppIcon
-                icon={props.iconLeft}
-                onPress={props.onPressIconLeft}
-                size={props.sizeIconLeft ?? props.sizeIcon}
+                icon={iconLeft}
+                onPress={onPressIconLeft}
+                size={sizeIconLeft ?? sizeIcon}
                 color={color.textSecondary}
-                style={{ marginLeft: 10 }}
+                containerStyle={{ margin: 10 }}
               />
             )}
 
             <TextInput
+              {...textInputProps} 
               testID="app-text-input"
               style={[
-                {
-                  flex: 1,
-                  height: '100%',
-                  paddingHorizontal: 12,
-                  color: props.disabled ? color.textSecondary : color.text,
-                  fontSize: 15,
-                },
-                props.inputStyle,
+                styles.textInput,
+                { color: disabled ? color.textSecondary : color.text },
+                inputStyle,
               ]}
               value={value}
               onChangeText={onChange}
               onBlur={onBlur}
-              editable={!props.disabled}
+              editable={!disabled}
               placeholderTextColor={
-                props.placeholderTextColor ?? color.textPlaceholder
+                textInputProps.placeholderTextColor ?? color.textPlaceholder
               }
-              {...props}
             />
 
-            {props.iconRight && (
+            {iconRight && (
               <AppIcon
-                icon={props.iconRight}
-                onPress={props.onPressIconRight}
-                size={props.sizeIconRight ?? props.sizeIcon}
+                icon={iconRight}
+                onPress={onPressIconRight}
+                size={sizeIconRight ?? sizeIcon}
                 color={color.textSecondary}
-                style={{ marginRight: 10 }}
+                containerStyle={{ margin: 10 }}
               />
             )}
           </View>
 
-          {error && !props.disabled && (
+          {error && (
             <AppText
-              testID="input-error-message"
               text={error.message}
-              style={{
-                color: color.error,
-                fontSize: 12,
-                marginTop: 4,
-                marginLeft: 4,
-              }}
+              style={[styles.errorText, { color: color.error }]}
             />
           )}
         </View>
@@ -143,3 +134,26 @@ export function AppTextInput<T extends FieldValues>({
     />
   );
 }
+
+const styles = StyleSheet.create({
+  labelContainer: {
+    flexDirection: 'row',
+    marginBottom: 6,
+    alignItems: 'center',
+  },
+  labelText: { fontSize: 14, fontWeight: '600' },
+  inputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    height: 50,
+    borderRadius: 10,
+    borderWidth: 1,
+  },
+  textInput: {
+    flex: 1,
+    height: '100%',
+    fontSize: 15,
+  },
+  errorText: { fontSize: 12, marginTop: 4, marginLeft: 4 },
+});
