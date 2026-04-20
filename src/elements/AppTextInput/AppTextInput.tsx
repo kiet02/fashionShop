@@ -40,12 +40,9 @@ export function AppTextInput<T extends FieldValues>({
   inputStyle,
   iconLeft,
   iconRight,
-  sizeIcon,
-  sizeIconRight,
-  sizeIconLeft,
   onPressIconLeft,
   onPressIconRight,
-  ...textInputProps 
+  ...textInputProps
 }: AppTextInputProps<T>) {
   const { color } = useAppTheme();
 
@@ -89,14 +86,13 @@ export function AppTextInput<T extends FieldValues>({
               <AppIcon
                 icon={iconLeft}
                 onPress={onPressIconLeft}
-                size={sizeIconLeft ?? sizeIcon}
                 color={color.textSecondary}
                 containerStyle={{ margin: 10 }}
               />
             )}
 
             <TextInput
-              {...textInputProps} 
+              {...textInputProps}
               testID="app-text-input"
               style={[
                 styles.textInput,
@@ -116,7 +112,6 @@ export function AppTextInput<T extends FieldValues>({
               <AppIcon
                 icon={iconRight}
                 onPress={onPressIconRight}
-                size={sizeIconRight ?? sizeIcon}
                 color={color.textSecondary}
                 containerStyle={{ margin: 10 }}
               />

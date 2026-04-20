@@ -1,71 +1,23 @@
 /* eslint-disable react-native/no-inline-styles */
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useForm } from 'react-hook-form'; // Thêm vào
+import { View } from 'react-native';
 import { AppImage } from '../../elements/AppImage';
-import { logo } from '../../utils';
-import { AppTextInput } from '../../elements/AppTextInput/AppTextInput';
-import { AppButton } from '../../elements/AppButton';
+import { logo, SIZE } from '../../utils';
 import { useAppTheme } from '../../utils/theme/useAppTheme';
-import { useAppLanguage } from '../../utils/language/useAppLanguage';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { getLoginSchema } from '../../utils/helper/rule';
-import { useNavigation } from '@react-navigation/native';
-import { NavigationStackProps } from '../../navigation/type';
-import { supabase } from '../../utils/fetchApi/supabase/supabase';
-
-
-type LoginFormData = {
-  email: string;
-  password: string;
-};
+import { LoginOther } from './items/LoginFooter';
+import { LoginBody } from './items/LoginBody';
 
 export function Login() {
   const { color } = useAppTheme();
-  const { language } = useAppLanguage();
-  const navigation = useNavigation<NavigationStackProps>();
 
-  
-
-  const { control, handleSubmit } = useForm<LoginFormData>({
-    resolver: yupResolver(getLoginSchema(language)),
-    defaultValues: {
-      email: '',
-      password: '',
-    },
-  });
-
-  const onLogin = async (data: LoginFormData) => {
-   if (!supabase) {
-     throw new Error('Supabase client chưa được khởi tạo thành công.');
-   }
-   try {
-     const { data: authData, error } = await supabase.auth.signInWithPassword({
-       email: data.email,
-       password: data.password,
-     });
-     if (error) {
-       throw error;
-     }
-     console.log(authData);
-     
-     return authData;
-   } catch (error: any) {
-     console.error('Login Process Error:', error.message);
-     throw error;
-   }
-  };
-
-  const toRegister = () => {
-    navigation.navigate('Register');
-  };
   return (
     <View
       style={{
-        flex: 1,
+        width: SIZE.WIDTH_DEVICE(100),
+        height: SIZE.HEIGHT_DEVICE(100),
+        alignSelf: 'center',
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: color.background,
-        padding: 40,
       }}
     >
       <AppImage
@@ -76,60 +28,8 @@ export function Login() {
           resizeMode: 'contain',
         }}
       />
-
-      <AppTextInput
-        control={control}
-        name="email"
-        iconLeft={{ type: 'MaterialIcons', name: 'email' }}
-        sizeIcon={20}
-        placeholder={language.login.emailPlaceholder || 'Email'}
-        keyboardType="email-address"
-        containerStyle={{ marginBottom: 20 }}
-      />
-
-      <AppTextInput
-        control={control}
-        name="password"
-        iconLeft={{ type: 'MaterialIcons', name: 'lock' }}
-        iconRight={{ type: 'MaterialIcons', name: 'lock' }}
-        sizeIcon={20}
-        placeholder={language.login.passwordPlaceholder || 'Password'}
-        secureTextEntry
-        containerStyle={{ marginBottom: 20 }}
-      />
-
-      <AppButton
-        title={language.login.loginButton}
-        containerStyle={{
-          backgroundColor: color.base,
-          width: 340,
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: 50,
-          borderRadius: 10,
-        }}
-        onPress={handleSubmit(onLogin)}
-      />
-
-      <View style={styles.registerRow}>
-        <Text style={{ color: color.textSecondary }}>
-          {language.register.alreadyHaveAccount || 'Đã có tài khoản? '}
-        </Text>
-        <TouchableOpacity onPress={toRegister}>
-          <Text style={{ color: color.base, fontWeight: 'bold' }}>
-            {language.login.registerHere || 'Đăng nhập'}
-          </Text>
-        </TouchableOpacity>
-      </View>
+      <LoginBody />
+      <LoginOther />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  registerRow: {
-    flexDirection: 'row',
-    marginTop: 20,
-    justifyContent: 'center',
-    gap: 6,
-  },
-});
