@@ -5,6 +5,7 @@ const EN: typeof VN = {
     home: 'Home',
     cart: 'Cart',
     profile: 'Profile',
+    Search: 'Search',
   },
   login: {
     title: 'Login',
@@ -46,6 +47,7 @@ const EN: typeof VN = {
   home: {
     bannerTitle: 'Step into Style:\nYour Fashion Destination',
     bannerButton: 'Explore Now',
+    bestSellerTitle: 'Best Sellers',
     footer: {
       shipping: {
         title: 'Giao hàng toàn quốc',

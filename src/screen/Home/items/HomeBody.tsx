@@ -4,11 +4,13 @@ import { FlashList } from '@shopify/flash-list';
 import { HomeBodyCard } from './HomeBodyCard';
 import { HomeBodySectionTitle } from './HomeBodySectionTitle';
 import { BestSellerItem } from '../../../utils/fetchApi/type';
+import { useAppLanguage } from '../../../utils/language/useAppLanguage';
 
 export function HomeBody({ data }: { data: BestSellerItem[] }) {
+  const { language } = useAppLanguage();
   return (
     <View style={styles.container}>
-      <HomeBodySectionTitle title="Mua nhiều nhất" onPress={() => {}} />
+      <HomeBodySectionTitle title={language.home.bestSellerTitle} />
       <FlashList
         data={data}
         renderItem={({ item }) => <HomeBodyCard data={item} />}

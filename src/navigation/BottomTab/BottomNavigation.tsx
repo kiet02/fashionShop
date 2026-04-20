@@ -2,10 +2,11 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { BottomTabParamList } from '../type';
-import { Cart, Home, Profile } from '../../screen';
+import { Home, Profile } from '../../screen';
 import { AppIcon, IconConfig } from '../../elements';
 import { useAppTheme } from '../../utils/theme/useAppTheme';
 import { useAppLanguage } from '../../utils/language/useAppLanguage';
+import { Search } from '../../screen/Search/Search';
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -19,7 +20,7 @@ export function BottomNavigation() {
         tabBarInactiveTintColor: themeColor.textSecondary,
         headerTitle: 'Fashion Shop',
         headerTitleAlign: 'center',
-        // tabBarBadge: route.name === 'Cart' ? 3 : undefined,
+        headerShown: route.name === 'Home' ? true : false,
         headerTitleStyle: {
           color: themeColor.text,
           fontSize: 24,
@@ -35,8 +36,8 @@ export function BottomNavigation() {
             case 'Home':
               iconConfig = { type: 'MaterialIcons', name: 'home' };
               break;
-            case 'Cart':
-              iconConfig = { type: 'MaterialIcons', name: 'shopping-cart' };
+            case 'Search':
+              iconConfig = { type: 'MaterialIcons', name: 'search' };
               break;
             case 'Profile':
               iconConfig = { type: 'MaterialIcons', name: 'person' };
@@ -55,9 +56,9 @@ export function BottomNavigation() {
         options={{ title: language.bottomTab.home }}
       />
       <Tab.Screen
-        name="Cart"
-        component={Cart}
-        options={{ title: language.bottomTab.cart }}
+        name="Search"
+        component={Search}
+        options={{ title: language.bottomTab.Search }}
       />
       <Tab.Screen
         name="Profile"

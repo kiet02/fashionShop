@@ -3,6 +3,7 @@ const VN = {
     home: 'Trang chủ',
     cart: 'Giỏ hàng',
     profile: 'Hồ sơ',
+    Search: 'Tìm kiếm',
   },
 
   login: {
@@ -45,6 +46,7 @@ const VN = {
   home: {
     bannerTitle: 'Bước theo Phong Cách:\nĐiểm đến thời trang của bạn',
     bannerButton: 'Khám phá ngay',
+    bestSellerTitle: 'Mua nhiều nhất',
     footer: {
       shipping: {
         title: 'Giao hàng toàn quốc',

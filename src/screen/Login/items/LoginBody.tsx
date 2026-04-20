@@ -58,16 +58,14 @@ export function LoginBody() {
         placeholder={language.login.passwordPlaceholder || 'Password'}
       />
 
-        <AppButton
-          title={language.login.loginButton}
-          type="TouchableOpacity"
-          containerStyle={{
-            backgroundColor: color.base,
-          }}
-          onPress={handleSubmit(onLogin)}
-        />
-
- 
+      <AppButton
+        title={language.login.loginButton}
+        type="TouchableOpacity"
+        containerStyle={{
+          backgroundColor: color.base,
+        }}
+        onPress={handleSubmit(onLogin)}
+      />
 
       <View style={styles.registerRow}>
         <Text style={{ color: color.textSecondary }}>

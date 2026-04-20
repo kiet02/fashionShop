@@ -10,6 +10,7 @@ export type BottomTabParamList = {
   Home: undefined;
   Profile: undefined;
   Cart: undefined;
+  Search: undefined;
 };
 
 export type RouteStackProps<T extends keyof RootStackParamList> =

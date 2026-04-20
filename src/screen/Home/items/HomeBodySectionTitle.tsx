@@ -1,12 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
-import { TouchableOpacity, View } from 'react-native';
+import { View } from 'react-native';
 import { useAppTheme } from '../../../utils/theme/useAppTheme';
 import { AppText } from '../../../elements';
 import { SIZE } from '../../../utils';
 
 export function HomeBodySectionTitle({
   title,
-  onPress,
 }: {
   title: string;
   onPress?: () => void;
@@ -27,14 +26,6 @@ export function HomeBodySectionTitle({
         text={title}
         style={{ fontSize: 18, fontWeight: 'bold', color: color.text }}
       />
-      {onPress && (
-        <TouchableOpacity onPress={onPress}>
-          <AppText
-            text="Xem tất cả"
-            style={{ color: color.primary, fontSize: 14 }}
-          />
-        </TouchableOpacity>
-      )}
     </View>
   );
 }
