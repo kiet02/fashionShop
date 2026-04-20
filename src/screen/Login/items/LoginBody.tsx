@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { AppButton, AppTextInput } from '../../../elements';
 import { SIZE } from '../../../utils';
@@ -11,15 +12,12 @@ import { useNavigation } from '@react-navigation/native';
 import { useAppTheme } from '../../../utils/theme/useAppTheme';
 
 export function LoginBody() {
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // Renamed for clarity
   const { language } = useAppLanguage();
   const { color } = useAppTheme();
   const navigation = useNavigation<NavigationStackProps>();
 
-  const { control, handleSubmit } = useForm<{
-    email: string;
-    password: string;
-  }>({
+  const { control, handleSubmit } = useForm({
     resolver: yupResolver(getLoginSchema(language)),
     defaultValues: {
       email: 'test@gmail.com',
@@ -29,14 +27,14 @@ export function LoginBody() {
 
   const onLogin = (data: any) => {
     navigation.navigate('BottomNavigation');
-    console.log('Dữ liệu đăng nhập:', data);
+    console.log('Login Data:', data);
   };
 
   const toRegister = () => {
     navigation.navigate('Register');
   };
   return (
-    <View>
+    <View style={{ width: SIZE.WIDTH_DP(100) - SIZE.MAR_L * 2 }}>
       <AppTextInput
         control={control}
         name="email"
@@ -52,38 +50,46 @@ export function LoginBody() {
         iconLeft={{ type: 'MaterialIcons', name: 'lock' }}
         iconRight={{
           type: 'MaterialIcons',
-          name: showConfirmPassword ? 'visibility' : 'visibility-off',
+          name: showPassword ? 'visibility' : 'visibility-off',
         }}
-        secureTextEntry={!showConfirmPassword}
-        onPressIconRight={() => setShowConfirmPassword(!showConfirmPassword)}
+        secureTextEntry={!showPassword}
+        onPressIconRight={() => setShowPassword(!showPassword)}
         sizeIcon={20}
         placeholder={language.login.passwordPlaceholder || 'Password'}
       />
 
-      <AppButton
-        title={language.login.loginButton}
-        type="TouchableOpacity"
-        containerStyle={{
-          width: SIZE.WIDTH_DP(100) - SIZE.MAR_L * 2,
-          backgroundColor: color.base,
-        }}
-        onPress={handleSubmit(onLogin)}
-      />
+        <AppButton
+          title={language.login.loginButton}
+          type="TouchableOpacity"
+          containerStyle={{
+            backgroundColor: color.base,
+          }}
+          onPress={handleSubmit(onLogin)}
+        />
+
+ 
 
       <View style={styles.registerRow}>
         <Text style={{ color: color.textSecondary }}>
-          {language.register.alreadyHaveAccount || 'Đã có tài khoản? '}
+          {language.login.dontHaveAccount || "Don't have an account?"}
         </Text>
         <TouchableOpacity onPress={toRegister}>
           <Text style={{ color: color.base, fontWeight: 'bold' }}>
-            {language.login.registerHere || 'Đăng nhập'}
+            {language.login.registerHere || 'Register Now'}
           </Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 }
+
 const styles = StyleSheet.create({
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 10,
+    marginTop: 10,
+  },
   registerRow: {
     flexDirection: 'row',
     marginTop: 20,
