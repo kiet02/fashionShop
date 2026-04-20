@@ -6,7 +6,7 @@ export const storage = createMMKV({
   encryptionKey: KEY_MMKV,
 });
 
-const supabaseStorage = {
+export const supabaseStorage = {
   getItem: (key: string) => {
     const value = storage.getString(key);
     return value ?? null;
@@ -18,8 +18,11 @@ const supabaseStorage = {
     storage.remove(key);
   },
 };
-
-// 3. Khởi tạo Supabase Client
+if (!VITE_SUPABASE_URL || !VITE_SUPABASE_KEY) {
+  console.error(
+    'SUPABASE_URL hoặc KEY bị thiếu! Kiểm tra file .env và config @env.',
+  );
+}
 export const supabase = createClient(VITE_SUPABASE_URL, VITE_SUPABASE_KEY, {
   auth: {
     storage: supabaseStorage,

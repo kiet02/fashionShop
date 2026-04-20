@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import { TouchableOpacity, View } from 'react-native';
 import { useAppTheme } from '../../../utils/theme/useAppTheme';
 import { no_image, SIZE } from '../../../utils';
@@ -5,7 +6,7 @@ import { AppImage, AppText } from '../../../elements';
 
 export function HomeBodyCard({ data }: { data: any }) {
   const { color } = useAppTheme();
-  const cardWidth = SIZE.width(45);
+  const cardWidth = SIZE.WIDTH_DP(45);
 
   return (
     <TouchableOpacity

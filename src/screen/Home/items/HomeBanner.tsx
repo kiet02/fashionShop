@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import { ImageBackground, View } from 'react-native';
 import { AppButton, AppText } from '../../../elements';
 import { useAppLanguage } from '../../../utils/language/useAppLanguage';
@@ -10,15 +11,15 @@ export function HomeBanner() {
     <ImageBackground
       source={banner}
       style={{
-        width: SIZE.WIDTH_DEVICE,
-        height: SIZE.HEIGHT_DEVICE / 2,
+        width: SIZE.WIDTH_DEVICE(100),
+        height: SIZE.HEIGHT_DP(50),
         justifyContent: 'flex-end',
         alignItems: 'center',
       }}
     >
       <View
         style={{
-          width: SIZE.width(70),
+          width: SIZE.WIDTH_DEVICE(70),
           gap: 10,
           justifyContent: 'center',
           alignItems: 'center',

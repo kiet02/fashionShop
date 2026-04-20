@@ -8,6 +8,7 @@ import { BottomNavigation } from './BottomTab/BottomNavigation';
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export function NavigationStack() {
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">

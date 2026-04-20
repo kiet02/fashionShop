@@ -1,60 +1,45 @@
 /* eslint-disable react-native/no-inline-styles */
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useForm } from 'react-hook-form'; // Thêm vào
 import { AppImage } from '../../elements/AppImage';
-import { logo } from '../../utils';
+import { logo, SIZE } from '../../utils';
 import { AppTextInput } from '../../elements/AppTextInput/AppTextInput';
 import { AppButton } from '../../elements/AppButton';
 import { useAppTheme } from '../../utils/theme/useAppTheme';
 import { useAppLanguage } from '../../utils/language/useAppLanguage';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { getLoginSchema } from '../../utils/helper/rule';
+// import { yupResolver } from '@hookform/resolvers/yup';
+// import { getLoginSchema } from '../../utils/helper/rule';
 import { useNavigation } from '@react-navigation/native';
 import { NavigationStackProps } from '../../navigation/type';
-import { supabase } from '../../utils/fetchApi/supabase/supabase';
 import { useState } from 'react';
+import { LoginFormData } from '../../utils/fetchApi/type';
+import { supabaseLogin } from '../../utils/fetchApi/fetch';
+import { LoginOther } from './items/LoginFooter';
 
-
-type LoginFormData = {
-  email: string;
-  password: string;
-};
 
 export function Login() {
   const { color } = useAppTheme();
   const { language } = useAppLanguage();
   const navigation = useNavigation<NavigationStackProps>();
- const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  
-
-  const { control, handleSubmit } = useForm<LoginFormData>({
-    resolver: yupResolver(getLoginSchema(language)),
+  const {
+    control,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm<LoginFormData>({
+    // resolver: yupResolver(getLoginSchema(language)),
     defaultValues: {
-      email: '',
-      password: '',
+      email: 'test@gmail.com',
+      password: 'test',
     },
   });
 
   const onLogin = async (data: LoginFormData) => {
-   if (!supabase) {
-     throw new Error('Supabase client chưa được khởi tạo thành công.');
-   }
-   try {
-     const { data: authData, error } = await supabase.auth.signInWithPassword({
-       email: data.email,
-       password: data.password,
-     });
-     if (error) {
-       throw error;
-     }
-     console.log(authData);
-     navigation.navigate('BottomNavigation');
-     return authData;
-   } catch (error: any) {
-     console.error('Login Process Error:', error.message);
-     throw error;
-   }
+  const res = await  supabaseLogin(data);
+    if(res.authData.session){
+      navigation.navigate('BottomNavigation');
+    }
   };
 
   const toRegister = () => {
@@ -63,11 +48,12 @@ export function Login() {
   return (
     <View
       style={{
-        flex: 1,
+        width: SIZE.WIDTH_DEVICE(100),
+        height: SIZE.HEIGHT_DEVICE(100),
+        alignSelf: 'center',
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: color.background,
-        padding: 40,
       }}
     >
       <AppImage
@@ -86,7 +72,7 @@ export function Login() {
         sizeIcon={20}
         placeholder={language.login.emailPlaceholder || 'Email'}
         keyboardType="email-address"
-        containerStyle={{ marginBottom: 20 }}
+        containerStyle={{ marginHorizontal: SIZE.MAR_L }}
       />
 
       <AppTextInput
@@ -101,19 +87,19 @@ export function Login() {
         onPressIconRight={() => setShowConfirmPassword(!showConfirmPassword)}
         sizeIcon={20}
         placeholder={language.login.passwordPlaceholder || 'Password'}
-        containerStyle={{ marginBottom: 20 }}
+        containerStyle={{ marginHorizontal: SIZE.MAR_L }}
       />
 
       <AppButton
-        title={language.login.loginButton}
+        title={isSubmitting ? '' : language.login.loginButton}
+        type='TouchableOpacity'
+        iconLeftComponent={
+          isSubmitting ? <ActivityIndicator color="#fff" /> : undefined
+        }
         containerStyle={{
-          backgroundColor: color.base,
-          width: 340,
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: 50,
-          borderRadius: 10,
-        }}
+          width:SIZE.WIDTH_DP(100)-SIZE.MAR_L*2,
+          backgroundColor:color.base,
+          }}
         onPress={handleSubmit(onLogin)}
       />
 
@@ -127,6 +113,8 @@ export function Login() {
           </Text>
         </TouchableOpacity>
       </View>
+
+      <LoginOther />
     </View>
   );
 }

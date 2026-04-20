@@ -28,10 +28,12 @@ interface BaseProps {
   containerStyle?: ViewStyle | ViewStyle[];
   titleStyle?: TextStyle | TextStyle[];
   children?: React.ReactNode;
-  iconRight?: IconConfig;
+  iconRight?: IconConfig ;
   iconLeft?: IconConfig;
   iconSize?: number;
   iconColor?: string;
+  iconLeftComponent?: React.ReactNode;
+  iconRightComponent?: React.ReactNode;
 }
 
 export function AppButton(props: AppButtonProps & BaseProps) {
@@ -43,8 +45,8 @@ export function AppButton(props: AppButtonProps & BaseProps) {
     titleStyle,
     iconRight,
     iconLeft,
-    iconSize = 20,
-    iconColor,
+    iconLeftComponent,
+    iconRightComponent,
     ...rest
   } = props;
 
@@ -54,35 +56,27 @@ export function AppButton(props: AppButtonProps & BaseProps) {
   } else if (type === 'TouchableHighlight') {
     SelectedButton = TouchableHighlight;
   }
-  const defaultIconColor = StyleSheet.flatten(titleStyle)?.color || '#FFFFFF';
   const renderContent = () => (
-    <View style={[styles.defaultButton, containerStyle]}>
-      {iconLeft && (
-        <AppIcon
-          icon={iconLeft}
-          size={iconSize}
-          color={iconColor || (defaultIconColor as string)}
-        />
-      )}
+    <View style={[styles.defaultButton,containerStyle ]}>
+      {iconLeft && !iconLeftComponent && <AppIcon icon={iconLeft} />}
 
+      {iconLeftComponent && iconLeftComponent}
       {children ?? (
-        <Text style={[styles.defaultText, titleStyle]}>
-          {title || 'Button'}
-        </Text>
+        <Text style={[styles.defaultText, titleStyle]}>{title}</Text>
       )}
 
-      {iconRight && (
-        <AppIcon
-          icon={iconRight}
-          size={iconSize}
-          color={iconColor || (defaultIconColor as string)}
-        />
-      )}
+      {iconRight && !iconRightComponent && <AppIcon icon={iconRight} />}
+      {iconRightComponent && iconRightComponent}
     </View>
   );
 
   return (
-    <SelectedButton testID="app-button" {...rest}>
+    <SelectedButton
+      testID="app-button"
+      {...rest}
+      style={[{ width: '100%',justifyContent: 'center',
+    alignItems: 'center', }, rest.style]}
+    >
       {renderContent()}
     </SelectedButton>
   );
@@ -94,9 +88,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: 50,
+    width: '100%',
     borderRadius: 8,
     paddingHorizontal: 16,
-    overflow: 'hidden',
+    backgroundColor: '#007BFF',
   },
   defaultText: {
     color: '#FFFFFF',

@@ -57,7 +57,7 @@ export function Register() {
       <AppText
         text={language.register.title || 'Đăng ký'}
         style={{
-          fontSize: SIZE.TEXTSIZE28,
+          fontSize: SIZE.TITLE_L,
           fontWeight: 'bold',
           marginBottom: 18,
           color: color.text,
@@ -119,12 +119,9 @@ export function Register() {
           onPress={handleSubmit(onRegister)}
           disabled={!isValid || !acceptedTerms || isSubmitting}
           containerStyle={{
+            width: SIZE.WIDTH_DP(100) - SIZE.MAR_L * 2,
             backgroundColor:
               !isValid || !acceptedTerms ? color.border : color.base,
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: 50,
-            borderRadius: 10,
           }}
         />
 

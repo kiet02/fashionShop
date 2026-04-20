@@ -1,6 +1,8 @@
+/* eslint-disable react-native/no-inline-styles */
 import { TouchableOpacity, View } from 'react-native';
 import { useAppTheme } from '../../../utils/theme/useAppTheme';
 import { AppText } from '../../../elements';
+import { SIZE } from '../../../utils';
 
 export function HomeBodySectionTitle({
   title,
@@ -16,9 +18,9 @@ export function HomeBodySectionTitle({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingHorizontal: 16,
-        marginTop: 20,
-        marginBottom: 10,
+        paddingHorizontal: SIZE.PAD_M,
+        marginTop: SIZE.MAR_S,
+        marginBottom: SIZE.MAR_S,
       }}
     >
       <AppText

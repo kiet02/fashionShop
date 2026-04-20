@@ -46,9 +46,7 @@ export function AppText({
         <AppIcon
           icon={iconLeft}
           onPress={onPressIconLeft}
-          size={20}
-          color="#000"
-          containerStyle={{ margin: 10 }}
+          containerStyle={styles.container}
         />
       )}
 
@@ -60,9 +58,7 @@ export function AppText({
         <AppIcon
           icon={iconRight}
           onPress={onPressIconRight}
-          size={20}
-          color="#000"
-          containerStyle={{ margin: 10 }}
+          containerStyle={styles.container}
         />
       )}
     </Container>
@@ -71,8 +67,7 @@ export function AppText({
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    margin: 10,
   },
   text: {
     fontSize: 16,
