@@ -1,0 +1,28 @@
+{
+  "name": "react-native-native-biometric",
+  "version": "0.0.1",
+  "description": "Native Biometric Module",
+  "main": "src/index",
+  "types": "src/index",
+  "files": [
+    "src",
+    "android",
+    "ios"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "keywords": [
+    "react-native",
+    "ios",
+    "android"
+  ],
+  "codegenConfig": {
+    "name": "NativeBiometric",
+    "type": "modules",
+    "jsSrcsDir": "src",
+    "android": {
+      "javaPackageName": "com.nativebiometric"
+    }
+  }
+}

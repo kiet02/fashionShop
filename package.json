@@ -23,6 +23,7 @@
     "react-native-bouncy-checkbox": "^4.1.4",
     "react-native-dotenv": "^3.4.11",
     "react-native-mmkv": "^4.3.1",
+    "react-native-native-biometric": "file:react-native-biometric",
     "react-native-nitro-modules": "^0.35.4",
     "react-native-responsive-screen": "^1.4.2",
     "react-native-safe-area-context": "^5.7.0",

@@ -1,0 +1,28 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: "com.facebook.react"
+
+android {
+    namespace "com.nativebiometric" // Phải khớp với package trong code Kotlin của bạn
+    compileSdkVersion 34
+
+    defaultConfig {
+        minSdkVersion 23
+        targetSdkVersion 34
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+}
+
+dependencies {
+    implementation "com.facebook.react:react-android"
+    implementation "androidx.biometric:biometric:1.1.0"
+}
