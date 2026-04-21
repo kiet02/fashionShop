@@ -5,6 +5,7 @@ import android.os.Build
 import android.provider.Settings
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
+import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
@@ -24,11 +25,13 @@ class NativeBiometricModule(reactContext: ReactApplicationContext) : NativeBiome
                 return@runOnUiThread
             }
 
-            val title = if (options?.hasKey("title") == true) options.getString("title") else null
-            val description = if (options?.hasKey("description") == true) options.getString("description") else null
+            val title = if (options.hasKey("title")) options.getString("title") else null
+            val description = if (options.hasKey("description")) options.getString("description") else null
+            val subTitle = if(options.hasKey("subTitle")) options.getString("subTitle") else null
 
             val finalTitle = if (title.isNullOrBlank()) "fashionShop Security" else title
             val finalDescription = description ?: ""
+            val finalSubTitle = subTitle ?: ""
 
             val executor = ContextCompat.getMainExecutor(activity)
             val biometricPrompt = BiometricPrompt(activity, executor, object : BiometricPrompt.AuthenticationCallback() {
@@ -50,9 +53,8 @@ class NativeBiometricModule(reactContext: ReactApplicationContext) : NativeBiome
             val promptInfo = BiometricPrompt.PromptInfo.Builder()
                 .setTitle(finalTitle)
                 .setDescription(finalDescription)
-                .setSubtitle("Xác thực để tiếp tục")
-                .setNegativeButtonText("Sử dụng mật khẩu")
-                .setAllowedAuthenticators(BIOMETRIC_STRONG)
+                .setSubtitle(finalSubTitle)
+                .setAllowedAuthenticators(BIOMETRIC_STRONG or DEVICE_CREDENTIAL)
                 .build()
 
             biometricPrompt.authenticate(promptInfo)

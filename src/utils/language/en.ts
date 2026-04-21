@@ -20,6 +20,7 @@ const EN: typeof VN = {
       passwordRequired: 'Password is required',
       passwordMin: 'Password must be at least 6 characters',
     },
+    
   },
   register: {
     title: 'Register',

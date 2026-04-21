@@ -1,4 +1,3 @@
-# Resolve react_native_pods.rb with node to allow for hoisting
 require Pod::Executable.execute_command('node', ['-p',
   'require.resolve(
     "react-native/scripts/react_native_pods.rb",
@@ -19,16 +18,27 @@ target 'fashionShop' do
 
   use_react_native!(
     :path => config[:reactNativePath],
-    # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
   post_install do |installer|
-    react_native_post_install(
-      installer,
-      config[:reactNativePath],
-      :mac_catalyst_enabled => false,
-      # :ccache_enabled => true
-    )
+    react_native_post_install(installer, config[:reactNativePath])
+    main_target = installer.aggregate_targets.find { |t| t.name.include?('Pods-') }
+    project_path = main_target.user_project_path
+    project_name = File.basename(project_path, ".xcodeproj")
+    ios_dir = File.dirname(project_path)
+    plist_path = File.join(ios_dir, project_name, "Info.plist")
+    
+    if File.exist?(plist_path)
+      puts "✅ Biometric Module: Found project '#{project_name}', updating Info.plist..."
+      system("/usr/libexec/PlistBuddy -c \"Add :NSFaceIDUsageDescription string 'Ứng dụng cần FaceID để bảo mật.'\" \"#{plist_path}\" > /dev/null 2>&1 || true")
+    else
+      puts "⚠️  Warning: Info.plist not found at #{plist_path}. Searching..."
+      found_plist = Dir.glob("#{ios_dir}/**/Info.plist").reject { |p| p.include?('Pods') || p.include?('Tests') }.first
+      if found_plist
+        system("/usr/libexec/PlistBuddy -c \"Add :NSFaceIDUsageDescription string 'Ứng dụng cần FaceID để bảo mật.'\" \"#{found_plist}\" > /dev/null 2>&1 || true")
+        puts "✅ Found and updated: #{found_plist}"
+      end
+    end
   end
 end

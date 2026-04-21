@@ -54,7 +54,6 @@ export function LoginBody() {
        Biometric.openSettings();
      }
    } catch (error) {
-     // Luôn luôn nên có try/catch khi làm việc với Native Module
      console.error('Lỗi rồi đại vương ơi:', error);
    }
  };
