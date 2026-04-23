@@ -1,6 +1,7 @@
 package com.nativebiometric
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.provider.Settings
 import androidx.biometric.BiometricManager
@@ -10,7 +11,6 @@ import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import com.facebook.react.bridge.*
-import com.nativebiometric.NativeBiometricSpec
 
 
 class NativeBiometricModule(reactContext: ReactApplicationContext) : NativeBiometricSpec(reactContext) {
@@ -76,17 +76,38 @@ class NativeBiometricModule(reactContext: ReactApplicationContext) : NativeBiome
         when (canAuth) {
             BiometricManager.BIOMETRIC_SUCCESS -> {
                 resultMap.putBoolean("available", true)
-                resultMap.putString("biometryType", "Biometrics")
+                resultMap.putString("biometryType", getActualBiometryType())
+                resultMap.putString("error", "")
             }
             BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> {
                 resultMap.putBoolean("available", false)
                 resultMap.putString("biometryType", "None")
-                resultMap.putString("error", "NO_BIOMETRICS")
+                resultMap.putString("error", "NOT_ENROLLED")
+            }
+            BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> {
+                resultMap.putBoolean("available", false)
+                resultMap.putString("biometryType", "None")
+                resultMap.putString("error", "NO_HARDWARE")
+            }
+            BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> {
+                resultMap.putBoolean("available", false)
+                resultMap.putString("biometryType", "None")
+                resultMap.putString("error", "HW_UNAVAILABLE")
+            }
+            BiometricManager.BIOMETRIC_ERROR_SECURITY_UPDATE_REQUIRED -> {
+                resultMap.putBoolean("available", false)
+                resultMap.putString("biometryType", "None")
+                resultMap.putString("error", "SECURITY_UPDATE_REQUIRED")
+            }
+            BiometricManager.BIOMETRIC_ERROR_UNSUPPORTED -> {
+                resultMap.putBoolean("available", false)
+                resultMap.putString("biometryType", "None")
+                resultMap.putString("error", "UNSUPPORTED")
             }
             else -> {
                 resultMap.putBoolean("available", false)
                 resultMap.putString("biometryType", "None")
-                resultMap.putString("error", "HARDWARE_UNAVAILABLE")
+                resultMap.putString("error", "STATUS_UNKNOWN")
             }
         }
         promise.resolve(resultMap)
@@ -104,6 +125,19 @@ class NativeBiometricModule(reactContext: ReactApplicationContext) : NativeBiome
         activity.startActivity(intent)
     }
 
+    private fun getActualBiometryType(): String {
+        val pm = reactApplicationContext.packageManager
+        val hasFace = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            pm.hasSystemFeature(PackageManager.FEATURE_FACE)
+        } else false
+        val hasFingerprint = pm.hasSystemFeature(PackageManager.FEATURE_FINGERPRINT)
+
+        return when {
+            hasFace -> "FaceID"
+            hasFingerprint -> "Fingerprint"
+            else -> "Biometrics"
+        }
+    }
     companion object {
         const val NAME = "NativeBiometric"
     }
