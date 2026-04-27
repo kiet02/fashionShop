@@ -1,16 +1,31 @@
+import React, { useState } from 'react';
 import { View } from 'react-native';
 import { AppButton, AppTextInput } from '../../../elements';
 import { SIZE } from '../../../utils';
 import { useAppTheme } from '../../../utils/theme/useAppTheme';
+import { SearchFilter } from './SearchFilter';
 
-export function SearchHeader({ control }: { control: any }) {
+interface SearchHeaderProps {
+  control: any;
+  onApply: () => void; // Hàm trigger gọi API
+  currentParams: any; // Tham số lọc hiện tại
+}
+
+export function SearchHeader({
+  control,
+  onApply,
+  currentParams,
+}: SearchHeaderProps) {
   const { color } = useAppTheme();
+  const [isVisible, setIsVisible] = useState(false);
+
   return (
     <View
       style={{
         flexDirection: 'row',
         marginHorizontal: SIZE.MAR_M,
         gap: SIZE.GAP_M,
+        marginBottom: SIZE.MAR_S, // Thêm chút margin dưới cho thoáng
       }}
     >
       <AppTextInput
@@ -19,10 +34,26 @@ export function SearchHeader({ control }: { control: any }) {
         name="search"
         placeholder="Search..."
         containerStyle={{ flex: 1 }}
+        onSubmitEditing={onApply}
+        returnKeyType="search"
       />
+
       <AppButton
         iconLeft={{ type: 'MaterialIcons', name: 'filter-alt' }}
-        containerStyle={{ backgroundColor: color.base }}
+        containerStyle={{
+          backgroundColor: color.base,
+          width: 50, // Cố định chiều rộng nút filter để cân đối
+          height: 50,
+        }}
+        onPress={() => setIsVisible(true)}
+      />
+
+      <SearchFilter
+        control={control}
+        visible={isVisible}
+        onClose={() => setIsVisible(false)}
+        onApply={onApply}
+        currentParams={currentParams}
       />
     </View>
   );

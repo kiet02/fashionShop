@@ -3,9 +3,12 @@ import { TouchableOpacity, View } from 'react-native';
 import { useAppTheme } from '../../../utils/theme/useAppTheme';
 import { no_image, SIZE } from '../../../utils';
 import { AppImage, AppText } from '../../../elements';
+import { Products } from '../../../utils/fetchApi/type';
+import { useAppLanguage } from '../../../utils/language/useAppLanguage';
 
-export function SearchBodyCard({ data }: { data: any }) {
+export function SearchBodyCard({ data }: { data: Products }) {
   const { color } = useAppTheme();
+  const { language } = useAppLanguage();
   const cardWidth = SIZE.WIDTH_DP(45);
 
   return (
@@ -27,7 +30,7 @@ export function SearchBodyCard({ data }: { data: any }) {
 
       <View style={{ padding: 10 }}>
         <AppText
-          text={data.name}
+          text={data.productName}
           numberOfLines={1}
           style={{ fontSize: 14, fontWeight: '600', color: color.text }}
         />
@@ -41,11 +44,11 @@ export function SearchBodyCard({ data }: { data: any }) {
           }}
         >
           <AppText
-            text={data.price}
+            text={`$${data.price} VND`}
             style={{ fontSize: 14, fontWeight: 'bold', color: color.primary }}
           />
           <AppText
-            text={data.sold}
+            text={`${language.home.sold}: ${data.sold}`}
             style={{ fontSize: 10, color: color.textSecondary }}
           />
         </View>

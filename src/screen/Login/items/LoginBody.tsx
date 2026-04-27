@@ -10,6 +10,8 @@ import { useAppLanguage } from '../../../utils/language/useAppLanguage';
 import { NavigationStackProps } from '../../../navigation/type';
 import { useNavigation } from '@react-navigation/native';
 import { useAppTheme } from '../../../utils/theme/useAppTheme';
+import { fetchLogin } from '../../../utils/fetchApi';
+import { LoginFormData } from '../../../utils/fetchApi/type';
 
 export function LoginBody() {
   const [showPassword, setShowPassword] = useState(false); // Renamed for clarity
@@ -17,17 +19,20 @@ export function LoginBody() {
   const { color } = useAppTheme();
   const navigation = useNavigation<NavigationStackProps>();
 
-  const { control, handleSubmit } = useForm({
-    resolver: yupResolver(getLoginSchema(language)),
+  const { control, handleSubmit } = useForm<LoginFormData>({
+    // resolver: yupResolver(getLoginSchema(language)),
     defaultValues: {
-      email: 'test@gmail.com',
-      password: '12312312312312',
+      email: 'hoang',
+      password: 'hoang',
     },
   });
 
-  const onLogin = (data: any) => {
-    navigation.navigate('BottomNavigation');
-    console.log('Login Data:', data);
+  const onLogin = async (data: LoginFormData) => {
+    const result = await fetchLogin(data.email, data.password);
+    if (result) {
+      navigation.navigate('BottomNavigation');
+      console.log('Login successful:', result);
+    }
   };
 
   const toRegister = () => {

@@ -48,6 +48,7 @@ const EN: typeof VN = {
     bannerTitle: 'Step into Style:\nYour Fashion Destination',
     bannerButton: 'Explore Now',
     bestSellerTitle: 'Best Sellers',
+    sold: 'Sold',
     footer: {
       shipping: {
         title: 'Giao hàng toàn quốc',

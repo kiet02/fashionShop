@@ -47,6 +47,7 @@ const VN = {
     bannerTitle: 'Bước theo Phong Cách:\nĐiểm đến thời trang của bạn',
     bannerButton: 'Khám phá ngay',
     bestSellerTitle: 'Mua nhiều nhất',
+    sold: 'Đã bán',
     footer: {
       shipping: {
         title: 'Giao hàng toàn quốc',

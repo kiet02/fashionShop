@@ -3,10 +3,10 @@ import { StyleSheet, View } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { HomeBodyCard } from './HomeBodyCard';
 import { HomeBodySectionTitle } from './HomeBodySectionTitle';
-import { BestSellerItem } from '../../../utils/fetchApi/type';
 import { useAppLanguage } from '../../../utils/language/useAppLanguage';
+import { BestProduct } from '../../../utils/fetchApi/type';
 
-export function HomeBody({ data }: { data: BestSellerItem[] }) {
+export function HomeBody({ data }: { data: BestProduct[] }) {
   const { language } = useAppLanguage();
   return (
     <View style={styles.container}>
@@ -14,7 +14,7 @@ export function HomeBody({ data }: { data: BestSellerItem[] }) {
       <FlashList
         data={data}
         renderItem={({ item }) => <HomeBodyCard data={item} />}
-        keyExtractor={item => item.id}
+        keyExtractor={item => item.id as unknown as string}
         numColumns={2}
         contentContainerStyle={styles.containerFlastList}
       />

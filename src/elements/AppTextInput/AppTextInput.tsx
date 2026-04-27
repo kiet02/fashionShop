@@ -23,6 +23,8 @@ interface AppTextInputProps<T extends FieldValues> extends TextInputProps {
   inputStyle?: StyleProp<TextStyle>;
   iconLeft?: IconConfig;
   iconRight?: IconConfig;
+  iconLeftComponent?: React.ReactNode;
+  iconRightComponent?: React.ReactNode;
   sizeIcon?: number;
   sizeIconRight?: number;
   sizeIconLeft?: number;
@@ -40,6 +42,8 @@ export function AppTextInput<T extends FieldValues>({
   inputStyle,
   iconLeft,
   iconRight,
+  iconLeftComponent,
+  iconRightComponent,
   onPressIconLeft,
   onPressIconRight,
   ...textInputProps
@@ -82,14 +86,15 @@ export function AppTextInput<T extends FieldValues>({
               },
             ]}
           >
-            {iconLeft && (
-              <AppIcon
-                icon={iconLeft}
-                onPress={onPressIconLeft}
-                color={color.textSecondary}
-                containerStyle={{ margin: 10 }}
-              />
-            )}
+            {iconLeftComponent ||
+              (iconLeft && (
+                <AppIcon
+                  icon={iconLeft}
+                  onPress={onPressIconLeft}
+                  color={color.textSecondary}
+                  containerStyle={{ margin: 10 }}
+                />
+              ))}
 
             <TextInput
               {...textInputProps}
@@ -108,14 +113,15 @@ export function AppTextInput<T extends FieldValues>({
               }
             />
 
-            {iconRight && (
-              <AppIcon
-                icon={iconRight}
-                onPress={onPressIconRight}
-                color={color.textSecondary}
-                containerStyle={{ margin: 10 }}
-              />
-            )}
+            {iconRightComponent ||
+              (iconRight && (
+                <AppIcon
+                  icon={iconRight}
+                  onPress={onPressIconRight}
+                  color={color.textSecondary}
+                  containerStyle={{ margin: 10 }}
+                />
+              ))}
           </View>
 
           {error && (

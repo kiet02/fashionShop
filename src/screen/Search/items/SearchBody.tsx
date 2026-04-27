@@ -1,93 +1,58 @@
+// SearchBody.tsx
 import { FlashList } from '@shopify/flash-list';
-import { StyleSheet, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { SearchBodyCard } from './SearchBodyCard';
+import { useQuery } from '@tanstack/react-query';
+import { KEY_API } from '../../../utils/fetchApi/api';
+import { fetchProductsWithFilter } from '../../../utils/fetchApi';
+import { useFormContext } from 'react-hook-form';
+import { useDebounce } from '../modules/useDebounce';
+import { AppText } from '../../../elements';
 
-export function SearchBody() {
-  const allItems = [
-    {
-      id: '1',
-      name: 'Áo thun Cotton Basic',
-      price: '250.000đ',
-      sold: 'Đã bán 1.2k',
-      image: 'https://picsum.photos/200',
-    },
-    {
-      id: '2',
-      name: 'Quần Jean Slimfit Nam',
-      price: '450.000đ',
-      sold: 'Đã bán 850',
-      image: 'https://picsum.photos/201',
-    },
-    {
-      id: '3',
-      name: 'Váy Hoa Nhí Vintage',
-      price: '320.000đ',
-      sold: 'Đã bán 2.1k',
-      image: 'https://picsum.photos/202',
-    },
-    {
-      id: '4',
-      name: 'Giày Sneaker Trắng',
-      price: '890.000đ',
-      sold: 'Đã bán 500',
-      image: 'https://picsum.photos/203',
-    },
-    {
-      id: '5',
-      name: 'Áo Khoác Bomber Đen',
-      price: '550.000đ',
-      sold: 'Đã bán 340',
-      image: 'https://picsum.photos/204',
-    },
-    {
-      id: '6',
-      name: 'Túi Xách Da Công Sở',
-      price: '1.200.000đ',
-      sold: 'Đã bán 120',
-      image: 'https://picsum.photos/205',
-    },
-    {
-      id: '7',
-      name: 'Mũ Lưỡi Trai Unisex',
-      price: '150.000đ',
-      sold: 'Đã bán 3.5k',
-      image: 'https://picsum.photos/206',
-    },
-    {
-      id: '8',
-      name: 'Thắt Lưng Da Nam',
-      price: '290.000đ',
-      sold: 'Đã bán 980',
-      image: 'https://picsum.photos/207',
-    },
-    {
-      id: '9',
-      name: 'Kính Mát Thời Trang',
-      price: '210.000đ',
-      sold: 'Đã bán 1.1k',
-      image: 'https://picsum.photos/208',
-    },
-    {
-      id: '10',
-      name: 'Sơ Mi Lụa Cao Cấp',
-      price: '680.000đ',
-      sold: 'Đã bán 450',
-      image: 'https://picsum.photos/209',
-    },
-  ];
+export function SearchBody({ params }: { params: any }) {
+  const { watch } = useFormContext();
+
+  const searchKeyword = watch('search');
+  const debouncedSearch = useDebounce(searchKeyword, 500);
+
+  const { data, isLoading } = useQuery({
+    queryKey: [KEY_API.search, debouncedSearch, params],
+    queryFn: () =>
+      fetchProductsWithFilter(
+        {
+          // KHÔNG dùng Number() ở đây nữa, truyền thẳng giá trị gốc
+          minPrice: params.minPrice,
+          maxPrice: params.maxPrice,
+          ...params.filter,
+        },
+        debouncedSearch,
+      ),
+    enabled: true,
+  });
+
+  if (isLoading) return <ActivityIndicator style={{ marginTop: 20 }} />;
 
   return (
     <View style={styles.container}>
       <FlashList
-        data={allItems}
+        data={data || []} // Đảm bảo data luôn là mảng, tránh lỗi khi data là undefined
         renderItem={({ item }) => <SearchBodyCard data={item} />}
-        keyExtractor={item => item.id}
+        keyExtractor={item => item.id.toString()}
         numColumns={2}
         contentContainerStyle={styles.containerFlastList}
+        // Thêm component khi list trống (Tùy chọn UX)
+        ListEmptyComponent={
+          !isLoading ? (
+            <View style={{ marginTop: 20, alignItems: 'center' }}>
+              <AppText text="Không tìm thấy sản phẩm" />
+            </View>
+          ) : null
+        }
       />
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
