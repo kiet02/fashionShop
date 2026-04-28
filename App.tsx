@@ -9,10 +9,8 @@ export default function App() {
   const { color } = useAppTheme();
   return (
     // eslint-disable-next-line react-native/no-inline-styles
-    <SafeAreaView style={{ flex: 1, backgroundColor: color.background}}>
-      <QueryClientProvider client={queryClient}>
-        <NavigationStack />
-      </QueryClientProvider>
-    </SafeAreaView>
+    <QueryClientProvider client={queryClient}>
+      <NavigationStack />
+    </QueryClientProvider>
   );
 }

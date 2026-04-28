@@ -4,6 +4,7 @@ export type RootStackParamList = {
   Login: undefined;
   Register: undefined;
   BottomNavigation: undefined;
+  Detail: { id: number };
 };
 
 export type BottomTabParamList = {

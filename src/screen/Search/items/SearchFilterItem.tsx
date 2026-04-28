@@ -87,7 +87,6 @@ export const SearchFilterItem = ({ control }: { control: any }) => {
 
   return (
     <View style={styles.root}>
-      {/* Header nhỏ chứa nút Xóa tất cả */}
       <View style={styles.headerFilter}>
         <Text style={styles.titleSection}>Bộ lọc chi tiết</Text>
         <TouchableOpacity onPress={handleClearAll}>

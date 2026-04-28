@@ -40,7 +40,7 @@ export function AppText({
       onPress={onPress}
       activeOpacity={0.7}
       disabled={!onPress}
-      style={containerStyle}
+      style={{ justifyContent: 'center', ...containerStyle }}
     >
       {iconLeft && (
         <AppIcon

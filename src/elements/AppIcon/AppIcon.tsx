@@ -72,8 +72,8 @@ export const AppIcon = memo(
         <IconComponent
           name={icon.name}
           size={size || icon.size}
-          color={color || icon.color}
-          style={iconStyle || icon.style || {}}
+          color={icon.color || color}
+          style={icon.style || iconStyle || {}}
         />
       </TouchableOpacity>
     );

@@ -43,4 +43,5 @@ export const KEY_API = {
   Products: 'products',
   Hot: 'hot-products',
   search: 'search',
+  Detail: 'product-detail',
 };

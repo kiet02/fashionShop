@@ -3,13 +3,16 @@ import { TouchableOpacity, View } from 'react-native';
 import { useAppTheme } from '../../../utils/theme/useAppTheme';
 import { no_image, SIZE } from '../../../utils';
 import { AppImage, AppText } from '../../../elements';
-import { Products } from '../../../utils/fetchApi/type';
+import { Product } from '../../../utils/fetchApi/type';
 import { useAppLanguage } from '../../../utils/language/useAppLanguage';
+import { RouteStackProps } from '../../../navigation/type';
+import { useNavigation } from '@react-navigation/native';
+export function SearchBodyCard({ data }: { data: Product }) {
 
-export function SearchBodyCard({ data }: { data: Products }) {
   const { color } = useAppTheme();
   const { language } = useAppLanguage();
   const cardWidth = SIZE.WIDTH_DP(45);
+  const navigation = useNavigation<RouteStackProps<'Detail'>['navigation']>();
 
   return (
     <TouchableOpacity
@@ -17,6 +20,7 @@ export function SearchBodyCard({ data }: { data: Products }) {
       style={[
         { width: cardWidth, backgroundColor: color.card, marginBottom: 16 },
       ]}
+      onPress={() => navigation.navigate('Detail', { id: data.id })}
     >
       <AppImage
         source={no_image}

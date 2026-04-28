@@ -20,7 +20,6 @@ export function SearchBody({ params }: { params: any }) {
     queryFn: () =>
       fetchProductsWithFilter(
         {
-          // KHÔNG dùng Number() ở đây nữa, truyền thẳng giá trị gốc
           minPrice: params.minPrice,
           maxPrice: params.maxPrice,
           ...params.filter,

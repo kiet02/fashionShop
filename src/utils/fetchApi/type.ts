@@ -1,4 +1,13 @@
-export type BestProduct = {
+export interface ProductInventoryItem {
+  id: number;
+  size: string;
+  color: string;
+  productImage: string;
+  bonusPrice: number;
+  quantity: number;
+}
+
+export interface BaseProduct {
   id: number;
   productName: string;
   productImage: string;
@@ -12,38 +21,41 @@ export type BestProduct = {
     brand: string;
     category: string;
   };
-  items: any | null;
   createAt: string | null;
   updateAt: string | null;
-};
-
-export type Products = {
+}
+export interface ProductDetail {
   id: number;
   productName: string;
   productImage: string;
   price: number;
+  sale: number; // % giảm giá (0 = không giảm)
   sold: number;
-  sale: number;
   description: string;
   rating: number;
-  category: {
-    gender: string;
-    brand: string;
-    category: string;
-  };
-  items: any | null;
+  categories: ProductCategory[];
+  items: ProductItem[];
   createAt: string | null;
   updateAt: string | null;
-};
+}
 
-export type LoginFormData = {
-  email: string;
-  password: string;
-};
-export type ProductFilter = {
-  gender?: string;
-  brand?: string;
-  category?: string;
-  minPrice?: number;
-  maxPrice?: number;
-};
+export interface ProductCategory {
+  id: number;
+  name: string;
+  type: 'gender' | 'brand' | 'category';
+}
+
+export interface ProductItem {
+  id: number;
+  size: string;
+  color: string;
+  productImage: string;
+  bonusPrice: number;
+  quantity: number;
+}
+
+export interface Product extends BaseProduct {
+  items: ProductInventoryItem[] | null;
+}
+
+export type BestProduct = Product;
