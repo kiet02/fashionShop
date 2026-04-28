@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { AppImage } from '../../elements/AppImage';
 import { logo, SIZE } from '../../utils';
 import { useAppTheme } from '../../utils/theme/useAppTheme';
-import { LoginOther } from './items/LoginFooter';
+// import { LoginOther } from './items/LoginFooter';
 import { LoginBody } from './items/LoginBody';
 
 export function Login() {
@@ -29,7 +29,7 @@ export function Login() {
         }}
       />
       <LoginBody />
-      <LoginOther />
+      {/* <LoginOther /> */}
     </View>
   );
 }

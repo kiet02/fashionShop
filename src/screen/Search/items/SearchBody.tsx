@@ -39,7 +39,6 @@ export function SearchBody({ params }: { params: any }) {
         keyExtractor={item => item.id.toString()}
         numColumns={2}
         contentContainerStyle={styles.containerFlastList}
-        // Thêm component khi list trống (Tùy chọn UX)
         ListEmptyComponent={
           !isLoading ? (
             <View style={{ marginTop: 20, alignItems: 'center' }}>
