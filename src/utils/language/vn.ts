@@ -44,9 +44,9 @@ const VN = {
     },
   },
   home: {
-    bannerTitle: 'Bước theo Phong Cách:\nĐiểm đến thời trang của bạn',
-    bannerButton: 'Khám phá ngay',
-    bestSellerTitle: 'Mua nhiều nhất',
+    bannerTitle: 'Công Nghệ Đỉnh Cao\nHiệu Năng Tuyệt Đối',
+    bannerButton: 'Build PC Ngay',
+    bestSellerTitle: 'Sản Phẩm Bán Chạy',
     sold: 'Đã bán',
     footer: {
       shipping: {

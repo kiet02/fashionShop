@@ -4,29 +4,39 @@ import { Controller, useFormContext } from 'react-hook-form'; // Thêm useFormCo
 import { IconVND, SIZE } from '../../../utils';
 import { Dropdown } from 'react-native-element-dropdown';
 import { AppIcon, AppTextInput } from '../../../elements';
-
-// --- Dữ liệu mẫu cho các Dropdown ---
-const GENDER_DATA = [
-  { label: 'Nam', value: 'male' },
-  { label: 'Nữ', value: 'female' },
-  { label: 'Trẻ con', value: 'kids' },
-];
+import { useAppTheme } from '../../../utils/theme/useAppTheme';
 
 const CATEGORY_DATA = [
-  { label: 'Giày', value: 'shoes' },
-  { label: 'Quần áo', value: 'clothing' },
-  { label: 'Phụ kiện', value: 'accessories' },
+  { label: 'Laptop', value: 'laptop' },
+  { id: '2', label: 'CPU', value: 'cpu' },
+  { label: 'VGA - Card đồ họa', value: 'vga' },
+  { label: 'Mainboard', value: 'mainboard' },
+  { label: 'RAM', value: 'ram' },
+  { label: 'SSD/HDD', value: 'storage' },
+  { label: 'Gaming Gear', value: 'gear' },
 ];
 
 const BRAND_DATA = [
-  { label: 'Nike', value: 'nike' },
-  { label: 'Adidas', value: 'adidas' },
-  { label: 'Puma', value: 'puma' },
+  { label: 'ASUS', value: 'asus' },
+  { label: 'MSI', value: 'msi' },
+  { label: 'GIGABYTE', value: 'gigabyte' },
+  { label: 'Intel', value: 'intel' },
+  { label: 'AMD', value: 'amd' },
+  { label: 'Samsung', value: 'samsung' },
+  { label: 'Razer', value: 'razer' },
+  { label: 'Logitech', value: 'logitech' },
+];
+
+const CONDITION_DATA = [
+  { label: 'Mới 100%', value: 'new' },
+  { label: 'Hàng Like New', value: 'likenew' },
+  { label: 'Đã qua sử dụng', value: 'used' },
 ];
 
 export const SearchFilterItem = ({ control }: { control: any }) => {
   // Lấy setValue từ FormProvider để reset các field
   const { setValue } = useFormContext();
+  const { color } = useAppTheme();
 
   // Hàm tiện ích: Xóa toàn bộ bộ lọc
   const handleClearAll = () => {
@@ -37,15 +47,22 @@ export const SearchFilterItem = ({ control }: { control: any }) => {
     setValue('maxPrice', '');
   };
 
-  const renderDropdown = (title: string, name: string, data: any[]) => (
+  const renderDropdown = (title: string, name: string, data: any[], icon: string) => (
     <View style={styles.section}>
-      <Text style={styles.label}>{title}</Text>
+      <View style={styles.labelRow}>
+        <AppIcon
+          icon={{ type: 'MaterialIcons', name: icon as any }}
+          size={18}
+          color={color.primary}
+        />
+        <Text style={[styles.label, { color: color.text }]}>{title}</Text>
+      </View>
       <Controller
         control={control}
         name={`filter.${name}`}
         render={({ field: { onChange, value } }) => (
           <Dropdown
-            style={styles.dropdown}
+            style={[styles.dropdown, { borderColor: color.border }]}
             placeholderStyle={styles.placeholderStyle}
             selectedTextStyle={styles.selectedTextStyle}
             data={data}
@@ -57,7 +74,6 @@ export const SearchFilterItem = ({ control }: { control: any }) => {
             onChange={item => onChange(item.value)}
             renderRightIcon={() => {
               if (value) {
-                // Đã đổi Text 'X' thành AppIcon cho chuyên nghiệp
                 return (
                   <TouchableOpacity
                     hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
@@ -73,7 +89,7 @@ export const SearchFilterItem = ({ control }: { control: any }) => {
               }
               return (
                 <AppIcon
-                  icon={{ type: 'MaterialIcons', name: 'arrow-drop-down' }}
+                  icon={{ type: 'MaterialIcons', name: 'keyboard-arrow-down' }}
                   size={24}
                   color="#999"
                 />
@@ -85,36 +101,45 @@ export const SearchFilterItem = ({ control }: { control: any }) => {
     </View>
   );
 
+
   return (
     <View style={styles.root}>
       <View style={styles.headerFilter}>
-        <Text style={styles.titleSection}>Bộ lọc chi tiết</Text>
+        <Text style={[styles.titleSection, { color: color.text }]}>Tùy chọn lọc</Text>
         <TouchableOpacity onPress={handleClearAll}>
-          <Text style={styles.clearText}>Xóa tất cả</Text>
+          <Text style={[styles.clearText, { color: color.primary }]}>Thiết lập lại</Text>
         </TouchableOpacity>
       </View>
 
-      {renderDropdown('Giới tính', 'gender', GENDER_DATA)}
-      {renderDropdown('Thể loại', 'category', CATEGORY_DATA)}
-      {renderDropdown('Hãng', 'brand', BRAND_DATA)}
+      {renderDropdown('Danh mục', 'category', CATEGORY_DATA, 'category')}
+      {renderDropdown('Thương hiệu', 'brand', BRAND_DATA, 'branding-watermark')}
+      {renderDropdown('Tình trạng', 'condition', CONDITION_DATA, 'info-outline')}
 
-      <Text style={styles.label}>Khoảng giá</Text>
+      <View style={styles.labelRow}>
+        <AppIcon
+          icon={{ type: 'MaterialIcons', name: 'payments' }}
+          size={18}
+          color={color.primary}
+        />
+        <Text style={[styles.label, { color: color.text }]}>Khoảng giá (VNĐ)</Text>
+      </View>
       <View style={styles.pricePlaceholder}>
         <AppTextInput
           control={control}
           name={'minPrice'}
-          placeholder="Tối thiểu" // Thêm placeholder
+          placeholder="Từ"
           keyboardType="number-pad"
           containerStyle={{ flex: 1 }}
-          iconRightComponent={<IconVND style={{ marginRight: 8 }} />}
+          inputStyle={{ fontSize: 14 }}
         />
+        <View style={styles.priceDivider} />
         <AppTextInput
           control={control}
           name={'maxPrice'}
-          placeholder="Tối đa" // Thêm placeholder
+          placeholder="Đến"
           keyboardType="number-pad"
           containerStyle={{ flex: 1 }}
-          iconRightComponent={<IconVND style={{ marginRight: 8 }} />}
+          inputStyle={{ fontSize: 14 }}
         />
       </View>
     </View>
@@ -123,56 +148,59 @@ export const SearchFilterItem = ({ control }: { control: any }) => {
 
 const styles = StyleSheet.create({
   root: {
-    paddingVertical: SIZE.PAD_S,
+    paddingVertical: SIZE.PAD_M,
   },
   headerFilter: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: SIZE.MAR_L,
+    marginBottom: 20,
   },
   titleSection: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
-    color: '#000',
   },
   clearText: {
     fontSize: 14,
-    color: '#FF4D4F', // Màu đỏ hoặc primary color của app bạn
     fontWeight: '600',
   },
   section: {
-    marginBottom: SIZE.MAR_M,
+    marginBottom: 20,
+  },
+  labelRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+    gap: 8,
   },
   label: {
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: '600',
-    color: '#333',
-    marginBottom: 8,
   },
   dropdown: {
     height: 50,
-    borderColor: '#E0E0E0',
     borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    backgroundColor: '#FAFAFA',
+    borderRadius: 12,
+    paddingHorizontal: 15,
+    backgroundColor: '#FFFFFF',
   },
   placeholderStyle: {
-    fontSize: 15,
+    fontSize: 14,
     color: '#999',
   },
   selectedTextStyle: {
-    fontSize: 15,
+    fontSize: 14,
     color: '#000',
   },
-  containerStyle: {
-    borderRadius: 8,
-    marginTop: 4,
-  },
   pricePlaceholder: {
-    height: 60,
-    gap: 12,
     flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  priceDivider: {
+    width: 15,
+    height: 1,
+    backgroundColor: '#CCC',
+    marginTop: -16, // Align with inputs
   },
 });

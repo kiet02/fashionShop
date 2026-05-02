@@ -1,9 +1,7 @@
-/* eslint-disable react-native/no-inline-styles */
 import { View } from 'react-native';
-import { AppImage } from '../../elements/AppImage';
-import { logo, SIZE } from '../../utils';
+import { AppText } from '../../elements/AppText';
+import { SIZE } from '../../utils';
 import { useAppTheme } from '../../utils/theme/useAppTheme';
-// import { LoginOther } from './items/LoginFooter';
 import { LoginBody } from './items/LoginBody';
 
 export function Login() {
@@ -17,19 +15,20 @@ export function Login() {
         alignSelf: 'center',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: color.background,
+        backgroundColor: color.primary,
       }}
     >
-      <AppImage
-        source={logo}
+      <AppText
         style={{
-          width: 500,
-          height: 150,
-          resizeMode: 'contain',
+          fontSize: 48,
+          fontWeight: 'bold',
+          color: '#FFFFFF',
+          marginBottom: 40,
         }}
-      />
+      >
+        Hoàng Hà PC
+      </AppText>
       <LoginBody />
-      {/* <LoginOther /> */}
     </View>
   );
 }

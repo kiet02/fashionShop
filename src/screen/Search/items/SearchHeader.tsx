@@ -41,9 +41,10 @@ export function SearchHeader({
       <AppButton
         iconLeft={{ type: 'MaterialIcons', name: 'filter-alt' }}
         containerStyle={{
-          backgroundColor: color.base,
-          width: 50, // Cố định chiều rộng nút filter để cân đối
+          backgroundColor: color.primary,
+          width: 50,
           height: 50,
+          borderRadius: 10,
         }}
         onPress={() => setIsVisible(true)}
       />

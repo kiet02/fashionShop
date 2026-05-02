@@ -2,7 +2,7 @@
 import { TouchableOpacity, View } from 'react-native';
 import { useAppTheme } from '../../../utils/theme/useAppTheme';
 import { no_image, SIZE } from '../../../utils';
-import { AppImage, AppText } from '../../../elements';
+import { AppIcon, AppImage, AppText } from '../../../elements';
 import { Product } from '../../../utils/fetchApi/type';
 import { useAppLanguage } from '../../../utils/language/useAppLanguage';
 import { RouteStackProps } from '../../../navigation/type';
@@ -18,26 +18,77 @@ export function SearchBodyCard({ data }: { data: Product }) {
     <TouchableOpacity
       activeOpacity={0.9}
       style={[
-        { width: cardWidth, backgroundColor: color.card, marginBottom: 16 },
+        {
+          width: cardWidth,
+          backgroundColor: '#FFFFFF',
+          marginBottom: 16,
+          borderRadius: 8,
+          overflow: 'hidden',
+          borderWidth: 1,
+          borderColor: color.border,
+        },
       ]}
       onPress={() => navigation.navigate('Detail', { id: data.id })}
     >
-      <AppImage
-        source={no_image}
-        style={{
-          width: cardWidth,
-          height: cardWidth,
-          aspectRatio: 1,
-          backgroundColor: color.border,
-        }}
-      />
+      <View>
+        <AppImage
+          source={data.productImage || no_image}
+          style={{
+            width: cardWidth,
+            height: cardWidth,
+            aspectRatio: 1,
+          }}
+        />
+        {data.sale > 0 && (
+          <View
+            style={{
+              position: 'absolute',
+              top: 8,
+              left: 8,
+              backgroundColor: '#FF0000',
+              paddingHorizontal: 6,
+              paddingVertical: 2,
+              borderRadius: 4,
+            }}
+          >
+            <AppText
+              text={`-${data.sale}%`}
+              style={{ color: '#FFFFFF', fontSize: 10, fontWeight: 'bold' }}
+            />
+          </View>
+        )}
+      </View>
 
       <View style={{ padding: 10 }}>
         <AppText
           text={data.productName}
-          numberOfLines={1}
-          style={{ fontSize: 14, fontWeight: '600', color: color.text }}
+          numberOfLines={2}
+          style={{
+            fontSize: 14,
+            fontWeight: '600',
+            color: color.text,
+            height: 40,
+          }}
         />
+
+        <View style={{ marginTop: 8 }}>
+          <AppText
+            text={`${data.price.toLocaleString('vi-VN')}đ`}
+            style={{ fontSize: 16, fontWeight: 'bold', color: color.primary }}
+          />
+          {data.sale > 0 && (
+            <AppText
+              text={`${(data.price * (1 + data.sale / 100)).toLocaleString(
+                'vi-VN',
+              )}đ`}
+              style={{
+                fontSize: 12,
+                color: color.textSecondary,
+                textDecorationLine: 'line-through',
+              }}
+            />
+          )}
+        </View>
 
         <View
           style={{
@@ -47,12 +98,19 @@ export function SearchBodyCard({ data }: { data: Product }) {
             marginTop: 8,
           }}
         >
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <AppIcon
+              icon={{ type: 'MaterialIcons', name: 'star' }}
+              color="#FFD700"
+              size={14}
+            />
+            <AppText
+              text={data.rating?.toString() || '0'}
+              style={{ fontSize: 12, color: color.text, marginLeft: 4 }}
+            />
+          </View>
           <AppText
-            text={`$${data.price} VND`}
-            style={{ fontSize: 14, fontWeight: 'bold', color: color.primary }}
-          />
-          <AppText
-            text={`${language.home.sold}: ${data.sold}`}
+            text={`Đã bán: ${data.sold}`}
             style={{ fontSize: 10, color: color.textSecondary }}
           />
         </View>

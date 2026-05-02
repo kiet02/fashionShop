@@ -1,93 +1,52 @@
-import { LOCALHOST } from '@env';
-import { API } from './api';
 import { BestProduct, ProductDetail } from './type';
+import { MOCK_PRODUCTS, MOCK_PRODUCT_DETAIL } from './mockData';
 
-const fetchApi = async (endpoint: string, options?: RequestInit) => {
-  const response = await fetch(`${LOCALHOST}/${endpoint}`, {
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
-  });
-  const text = await response.text();
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-  if (!response.ok) {
-    console.log('ERROR BODY:', text);
-    throw new Error(`Error fetching API: ${response.status}`);
-  }
-
-  return JSON.parse(text);
-};
-
-export function fetchLogin(email: string, password: string) {
-  return fetchApi(API.Login, {
-    method: 'POST',
-    body: JSON.stringify({ email, password }),
-  });
+export async function fetchLogin(email: string, password: string) {
+  console.log('Mock Login:', email, password);
+  await delay(500);
+  return { status: 'success', token: 'mock-token' };
 }
 
-export function fetchRegister(email: string, password: string) {
-  return fetchApi(API.Register, {
-    method: 'POST',
-    body: JSON.stringify({ email, password }),
-  });
+export async function fetchRegister(email: string, password: string) {
+  console.log('Mock Register:', email, password);
+  await delay(500);
+  return { status: 'success' };
 }
 
-export function fetchProductsHot(): Promise<BestProduct[]> {
-  return fetchApi(API.Hot, {
-    method: 'GET',
-  });
+export async function fetchProductsHot(): Promise<BestProduct[]> {
+  await delay(300);
+  return MOCK_PRODUCTS;
 }
-export function fetchProductDetail(id: number): Promise<ProductDetail> {
-  return fetchApi(API.ProductDetail(id), {
-    method: 'GET',
-  });
+
+export async function fetchProductDetail(id: number): Promise<ProductDetail> {
+  await delay(300);
+  // Return the mock detail, possibly matching ID if needed, but for now just the mock
+  return { ...MOCK_PRODUCT_DETAIL, id };
 }
 
 export async function fetchProductsWithFilter(
   filter: any = {},
   searchQuery?: string,
 ): Promise<BestProduct[]> {
-  const path = 'api/v1/product/filter';
-  const params = new URLSearchParams();
-  const hasMin = filter.minPrice !== undefined && filter.minPrice !== '';
-  const hasMax = filter.maxPrice !== undefined && filter.maxPrice !== '';
-
-  if (hasMin || hasMax) {
-    const min = hasMin ? filter.minPrice : '0';
-    const max = hasMax ? filter.maxPrice : '2147483647';
-    params.append('price', `${min},${max}`);
-  }
-
-  Object.entries(filter).forEach(([key, value]) => {
-    if (
-      value !== undefined &&
-      value !== null &&
-      value !== '' &&
-      key !== 'minPrice' &&
-      key !== 'maxPrice' &&
-      key !== 'filter'
-    ) {
-      params.append(key, value.toString());
-    }
-  });
-
-  const queryString = params.toString();
-  const finalPath = queryString ? `${path}?${queryString}` : path;
-
-  const data: BestProduct[] = await fetchApi(finalPath, {
-    method: 'GET',
-  });
-  if (!data || !Array.isArray(data)) {
-    return [];
-  }
+  await delay(300);
+  let data = [...MOCK_PRODUCTS];
 
   if (searchQuery && searchQuery.trim() !== '') {
     const keyword = searchQuery.toLowerCase().trim();
-    return data.filter(product =>
+    data = data.filter(product =>
       product.productName?.toLowerCase().includes(keyword),
     );
+  }
+
+  // Simple price filtering mock
+  const hasMin = filter.minPrice !== undefined && filter.minPrice !== '';
+  const hasMax = filter.maxPrice !== undefined && filter.maxPrice !== '';
+  if (hasMin || hasMax) {
+    const min = hasMin ? Number(filter.minPrice) : 0;
+    const max = hasMax ? Number(filter.maxPrice) : Infinity;
+    data = data.filter(p => p.price >= min && p.price <= max);
   }
 
   return data;

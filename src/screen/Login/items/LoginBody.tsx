@@ -67,17 +67,22 @@ export function LoginBody() {
         title={language.login.loginButton}
         type="TouchableOpacity"
         containerStyle={{
-          backgroundColor: color.base,
+          backgroundColor: '#FFFFFF',
+          marginTop: 10,
+        }}
+        titleStyle={{
+          color: color.primary,
+          fontWeight: 'bold',
         }}
         onPress={handleSubmit(onLogin)}
       />
 
       <View style={styles.registerRow}>
-        <Text style={{ color: color.textSecondary }}>
+        <Text style={{ color: '#FFFFFF' }}>
           {language.login.dontHaveAccount || "Don't have an account?"}
         </Text>
         <TouchableOpacity onPress={toRegister}>
-          <Text style={{ color: color.base, fontWeight: 'bold' }}>
+          <Text style={{ color: '#FFFFFF', fontWeight: 'bold', textDecorationLine: 'underline' }}>
             {language.login.registerHere || 'Register Now'}
           </Text>
         </TouchableOpacity>

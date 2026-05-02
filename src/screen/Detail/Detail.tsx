@@ -23,7 +23,7 @@ export function Detail() {
   if (isLoading || !data) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#EE4D2D" />
+        <ActivityIndicator size="large" color="#002D5E" />
       </View>
     );
   }
@@ -42,8 +42,11 @@ export function Detail() {
       </ScrollView>
 
       <View style={styles.bottomBar}>
+        <TouchableOpacity style={styles.cartIconBtn}>
+           <AppText style={{ fontSize: 24 }}>🛒</AppText>
+        </TouchableOpacity>
         <TouchableOpacity style={styles.addToCartBtn}>
-          <AppText style={styles.addToCartText}>Thêm vào giỏ hàng</AppText>
+          <AppText style={styles.addToCartText}>MUA NGAY</AppText>
         </TouchableOpacity>
       </View>
     </View>
@@ -53,7 +56,7 @@ export function Detail() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#F8F9FA',
   },
   loadingContainer: {
     flex: 1,
@@ -65,27 +68,40 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    gap: 8,
+    gap: 12,
     paddingBottom: 24,
   },
   bottomBar: {
+    flexDirection: 'row',
     backgroundColor: '#fff',
-    paddingHorizontal: 14,
+    paddingHorizontal: 16,
     paddingVertical: 12,
     borderTopWidth: 1,
-    borderTopColor: '#E0E0E0',
-    paddingBottom: 24, // Assuming some bottom safe area padding
+    borderTopColor: '#EEEEEE',
+    paddingBottom: 30,
+    gap: 12,
+  },
+  cartIconBtn: {
+    width: 50,
+    height: 50,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#002D5E',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   addToCartBtn: {
-    backgroundColor: '#EE4D2D',
-    height: 48,
-    borderRadius: 4,
+    flex: 1,
+    backgroundColor: '#002D5E',
+    height: 50,
+    borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
   },
   addToCartText: {
     color: '#fff',
-    fontSize: 15,
-    fontWeight: '600',
+    fontSize: 16,
+    fontWeight: 'bold',
+    letterSpacing: 0.5,
   },
 });

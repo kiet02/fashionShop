@@ -3,7 +3,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { BottomTabParamList } from '../type';
 import { Home, Profile } from '../../screen';
-import { AppIcon, IconConfig } from '../../elements';
+import { AppIcon, AppText, IconConfig } from '../../elements';
 import { useAppTheme } from '../../utils/theme/useAppTheme';
 import { useAppLanguage } from '../../utils/language/useAppLanguage';
 import { Search } from '../../screen/Search/Search';
@@ -18,14 +18,32 @@ export function BottomNavigation() {
       screenOptions={({ route }) => ({
         tabBarActiveTintColor: themeColor.primary,
         tabBarInactiveTintColor: themeColor.textSecondary,
-        headerTitle: 'Fashion Shop',
-        headerTitleAlign: 'center',
         headerShown: route.name === 'Home' ? true : false,
-        headerTitleStyle: {
-          color: themeColor.text,
-          fontSize: 24,
-          fontWeight: 'bold',
+        headerStyle: {
+          backgroundColor: themeColor.primary,
         },
+        headerTitle: '',
+        headerLeft: () => (
+          <AppText
+            style={{
+              color: '#FFFFFF',
+              fontSize: 20,
+              fontWeight: 'bold',
+              marginLeft: 16,
+            }}
+          >
+            Hoàng Hà PC
+          </AppText>
+        ),
+        headerRight: () => (
+          <AppIcon
+            icon={{ type: 'MaterialIcons', name: 'shopping-cart' }}
+            color="#FFFFFF"
+            size={24}
+            containerStyle={{ marginRight: 16 }}
+            onPress={() => {}}
+          />
+        ),
         tabBarStyle: {
           backgroundColor: themeColor.background,
           borderTopColor: themeColor.border,

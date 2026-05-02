@@ -50,7 +50,7 @@ export function Register() {
     <ScrollView
       contentContainerStyle={[
         styles.container,
-        { backgroundColor: color.background },
+        { backgroundColor: color.primary },
       ]}
       keyboardShouldPersistTaps="handled"
     >
@@ -60,7 +60,7 @@ export function Register() {
           fontSize: SIZE.TITLE_L,
           fontWeight: 'bold',
           marginBottom: 18,
-          color: color.text,
+          color: '#FFFFFF',
         }}
       />
 
@@ -75,6 +75,7 @@ export function Register() {
           keyboardType="email-address"
           autoCapitalize="none"
           containerStyle={styles.fieldSpacing}
+          titleStyle={{ color: '#FFFFFF' }}
         />
 
         <AppTextInput
@@ -91,6 +92,7 @@ export function Register() {
           onPressIconRight={() => setShowPassword(!showPassword)}
           secureTextEntry={!showPassword}
           containerStyle={styles.fieldSpacing}
+          titleStyle={{ color: '#FFFFFF' }}
         />
 
         <AppTextInput
@@ -107,6 +109,7 @@ export function Register() {
           onPressIconRight={() => setShowConfirmPassword(!showConfirmPassword)}
           secureTextEntry={!showConfirmPassword}
           containerStyle={styles.fieldSpacing}
+          titleStyle={{ color: '#FFFFFF' }}
         />
 
         <RegisterTerms
@@ -121,16 +124,20 @@ export function Register() {
           containerStyle={{
             width: SIZE.WIDTH_DP(100) - SIZE.MAR_L * 2,
             backgroundColor:
-              !isValid || !acceptedTerms ? color.border : color.base,
+              !isValid || !acceptedTerms ? '#CCCCCC' : '#FFFFFF',
+          }}
+          titleStyle={{
+            color: color.primary,
+            fontWeight: 'bold',
           }}
         />
 
         <View style={styles.loginRow}>
-          <Text style={{ color: color.textSecondary }}>
+          <Text style={{ color: '#FFFFFF' }}>
             {language.register.alreadyHaveAccount || 'Đã có tài khoản? '}
           </Text>
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text style={{ color: color.base, fontWeight: 'bold' }}>
+            <Text style={{ color: '#FFFFFF', fontWeight: 'bold', textDecorationLine: 'underline' }}>
               {language.register.loginNow || 'Đăng nhập'}
             </Text>
           </TouchableOpacity>

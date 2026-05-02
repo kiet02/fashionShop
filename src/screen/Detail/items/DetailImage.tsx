@@ -137,11 +137,11 @@ const styles = StyleSheet.create({
     borderRadius: 3,
   },
   dotActive: {
-    backgroundColor: '#EE4D2D',
-    width: 18, // Dot active dài hơn để dễ nhận biết
+    backgroundColor: '#002D5E',
+    width: 20,
   },
   dotInactive: {
-    backgroundColor: '#D9D9D9',
+    backgroundColor: '#E0E0E0',
   },
   thumbWrapper: {
     height: THUMB_SIZE + THUMB_MARGIN * 2,
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   thumbItemActive: {
-    borderColor: '#EE4D2D',
+    borderColor: '#002D5E',
   },
   thumbImage: {
     width: '100%',

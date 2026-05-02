@@ -5,11 +5,12 @@ import { AppText, AppIcon } from '../../../elements';
 import { useAppTheme } from '../../../utils/theme/useAppTheme';
 
 const categories = [
-  { id: '1', name: 'Áo nam', icon: 'checkroom' },
-  { id: '2', name: 'Váy nữ', icon: 'accessibility' },
-  { id: '3', name: 'Giày dép', icon: 'ice-skating' },
-  { id: '4', name: 'Phụ kiện', icon: 'watch' },
-  { id: '5', name: 'Giảm giá', icon: 'sell' },
+  { id: '1', name: 'Laptop', icon: 'laptop' },
+  { id: '2', name: 'Build PC', icon: 'settings-input-component' },
+  { id: '3', name: 'Linh kiện', icon: 'memory' },
+  { id: '4', name: 'Màn hình', icon: 'monitor' },
+  { id: '5', name: 'Chuột/Phím', icon: 'mouse' },
+  { id: '6', name: 'Gaming Gear', icon: 'videogame-asset' },
 ];
 
 export function HomeCategories() {

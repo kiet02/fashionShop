@@ -21,8 +21,10 @@ export function RegisterTerms({ acceptedTerms, onPress }: Props) {
         size={24}
         isChecked={acceptedTerms}
         onPress={onPress}
-        fillColor={color.base}
-        unFillColor={color.background}
+        fillColor="#FFFFFF"
+        unFillColor="transparent"
+        iconStyle={{ borderColor: '#FFFFFF' }}
+        innerIconStyle={{ borderWidth: 2, borderColor: '#FFFFFF' }}
         textComponent={
           <View
             style={{ flex: 1, flexDirection: 'row', marginLeft: 10, gap: 6 }}
@@ -31,18 +33,18 @@ export function RegisterTerms({ acceptedTerms, onPress }: Props) {
               text={language.register.terms}
               style={[
                 styles.termsText,
-                { color: color.base, fontWeight: 'bold' },
+                { color: '#FFFFFF', fontWeight: 'bold', textDecorationLine: 'underline' },
               ]}
             />
             <AppText
               text={language.register.and}
-              style={[styles.termsText, { color: color.textSecondary }]}
+              style={[styles.termsText, { color: '#FFFFFF' }]}
             />
             <AppText
               text={language.register.policy}
               style={[
                 styles.termsText,
-                { color: color.base, fontWeight: 'bold' },
+                { color: '#FFFFFF', fontWeight: 'bold', textDecorationLine: 'underline' },
               ]}
             />
           </View>

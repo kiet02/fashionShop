@@ -36,7 +36,7 @@ export function DetailVariants({ items }: Props) {
       {colors.length > 0 && (
         <View style={styles.section}>
           <View style={styles.titleRow}>
-            <AppText style={styles.title}>Màu sắc</AppText>
+            <AppText style={styles.title}>Phiên bản màu</AppText>
             {!!selectedColor && <AppText style={styles.selectedValue}>{selectedColor}</AppText>}
           </View>
           <View style={styles.optionsRow}>
@@ -61,7 +61,7 @@ export function DetailVariants({ items }: Props) {
       {sizes.length > 0 && (
         <View style={styles.section}>
           <View style={styles.titleRow}>
-            <AppText style={styles.title}>Kích thước</AppText>
+            <AppText style={styles.title}>Cấu hình</AppText>
             {!!selectedSize && <AppText style={styles.selectedValue}>{selectedSize}</AppText>}
           </View>
           <View style={styles.optionsRow}>
@@ -146,8 +146,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FAFAFA',
   },
   optionBtnSelected: {
-    borderColor: '#EE4D2D',
-    backgroundColor: '#FFF0ED',
+    borderColor: '#002D5E',
+    backgroundColor: '#E6F0F8',
   },
   optionBtnDisabled: {
     backgroundColor: '#F5F5F5',
@@ -158,8 +158,8 @@ const styles = StyleSheet.create({
     color: '#1A1A1A',
   },
   optionTextSelected: {
-    color: '#EE4D2D',
-    fontWeight: '500',
+    color: '#002D5E',
+    fontWeight: 'bold',
   },
   optionTextDisabled: {
     color: '#BDBDBD',
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
     padding: 2,
   },
   colorCircleBtnSelected: {
-    borderColor: '#EE4D2D',
+    borderColor: '#002D5E',
   },
   colorCircle: {
     width: '100%',
