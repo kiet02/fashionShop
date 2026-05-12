@@ -5,10 +5,13 @@ import { no_image, SIZE } from '../../../utils';
 import { AppImage, AppText } from '../../../elements';
 import { BestProduct } from '../../../utils/fetchApi/type';
 import { useAppLanguage } from '../../../utils/language/useAppLanguage';
+import { useNavigation } from '@react-navigation/native';
+import { RouteStackProps } from '../../../navigation/type';
 
 export function HomeBodyCard({ data }: { data: BestProduct }) {
   const { color } = useAppTheme();
   const { language } = useAppLanguage();
+  const navigation = useNavigation<RouteStackProps<'Detail'>['navigation']>();
   const cardWidth = SIZE.WIDTH_DP(45);
 
   return (
@@ -17,6 +20,7 @@ export function HomeBodyCard({ data }: { data: BestProduct }) {
       style={[
         { width: cardWidth, backgroundColor: color.card, marginBottom: 16 },
       ]}
+      onPress={() => navigation.navigate('Detail', { id: data.id })}
     >
       <AppImage
         source={data.productImage || no_image}

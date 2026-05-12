@@ -23,7 +23,7 @@ export function SearchBodyCard({ data }: { data: Product }) {
       onPress={() => navigation.navigate('Detail', { id: data.id })}
     >
       <AppImage
-        source={no_image}
+        source={data.productImage || no_image}
         style={{
           width: cardWidth,
           height: cardWidth,
@@ -48,7 +48,7 @@ export function SearchBodyCard({ data }: { data: Product }) {
           }}
         >
           <AppText
-            text={`$${data.price} VND`}
+            text={`${data.price} VND`}
             style={{ fontSize: 14, fontWeight: 'bold', color: color.primary }}
           />
           <AppText

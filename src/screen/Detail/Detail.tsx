@@ -1,35 +1,78 @@
-/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable react/no-unstable-nested-components */
 import { useQuery } from '@tanstack/react-query';
-import { ActivityIndicator, ScrollView, StyleSheet, View, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, View, TouchableOpacity, Alert } from 'react-native';
 import { KEY_API } from '../../utils/fetchApi/api';
 import { fetchProductDetail } from '../../utils/fetchApi';
 import { DetailImage } from './items/DetailImage';
 import { DetailTitle } from './items/DetailTitle';
 import { DetailVariants } from './items/DetailVariants';
 import { DetailDescription } from './items/DetailDescription';
+import { CommentList } from '../comment/CommentList';
 import { AppText } from '../../elements';
 import { useRoute } from '@react-navigation/native';
-import { RouteStackProps } from '../../navigation/type';
+import { useAppTheme } from '../../utils/theme/useAppTheme';
+import { NavigationStackProps, RouteStackProps } from '../../navigation/type';
+import { useCart } from '../../utils/cart/CartContext';
+import { ProductItem } from '../../utils/fetchApi/type';
+import { useState, useLayoutEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { AppIcon } from '../../elements';
 
 export function Detail() {
-
+  const { color } = useAppTheme();
+  const { addToCart, totalItems } = useCart();
+  const [selectedVariant, setSelectedVariant] = useState<ProductItem | undefined>();
+  const navigation = useNavigation<NavigationStackProps>();
   const route = useRoute<RouteStackProps<'Detail'>['route']>()
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <AppIcon
+          icon={{ type: 'MaterialIcons', name: 'shopping-cart' }}
+          color={color.text}
+          size={24}
+          containerStyle={{ marginRight: 10 }}
+          badge={totalItems}
+          onPress={() => navigation.navigate('Cart')}
+        />
+      ),
+    });
+  }, [navigation, totalItems, color.text]);
 
   const { data, isLoading } = useQuery({
     queryKey: [KEY_API.Detail, route.params?.id],
     queryFn: () => fetchProductDetail(route.params?.id),
   });
 
+  const handleAddToCart = () => {
+    if (!data || !selectedVariant) return;
+
+    const brand = data.categories?.find(c => c.type === 'brand')?.name ?? 'Generic';
+
+    addToCart({
+      id: `${data.id}-${selectedVariant.id}`,
+      name: data.productName,
+      brand: brand,
+      price: data.price + (selectedVariant.bonusPrice || 0),
+      image: selectedVariant.productImage || data.productImage,
+      size: selectedVariant.size,
+      color: selectedVariant.color,
+      quantity: 1,
+    });
+    Alert.alert('Đã thêm vào giỏ hàng!');
+  };
+
   if (isLoading || !data) {
     return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#EE4D2D" />
+      <View style={[styles.loadingContainer, { backgroundColor: color.background }]}>
+        <ActivityIndicator size="large" color={color.base} />
       </View>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: color.background }]}>
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.content}
@@ -37,12 +80,16 @@ export function Detail() {
       >
         <DetailImage data={data.items ?? []} />
         <DetailTitle data={data} />
-        <DetailVariants items={data.items ?? []} />
+        <DetailVariants items={data.items ?? []} onVariantChange={setSelectedVariant} />
         <DetailDescription data={data} />
+        <CommentList productId={data.id} />
       </ScrollView>
 
-      <View style={styles.bottomBar}>
-        <TouchableOpacity style={styles.addToCartBtn}>
+      <View style={[styles.bottomBar, { backgroundColor: color.card, borderTopColor: color.border }]}>
+        <TouchableOpacity
+          style={[styles.addToCartBtn, { backgroundColor: color.base }]}
+          onPress={handleAddToCart}
+        >
           <AppText style={styles.addToCartText}>Thêm vào giỏ hàng</AppText>
         </TouchableOpacity>
       </View>

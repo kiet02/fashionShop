@@ -28,6 +28,7 @@ interface AppTextInputProps<T extends FieldValues> extends TextInputProps {
   sizeIcon?: number;
   sizeIconRight?: number;
   sizeIconLeft?: number;
+  rules?: any;
   onPressIconLeft?: () => void;
   onPressIconRight?: () => void;
 }
@@ -46,6 +47,7 @@ export function AppTextInput<T extends FieldValues>({
   iconRightComponent,
   onPressIconLeft,
   onPressIconRight,
+  rules,
   ...textInputProps
 }: AppTextInputProps<T>) {
   const { color } = useAppTheme();
@@ -54,6 +56,7 @@ export function AppTextInput<T extends FieldValues>({
     <Controller
       control={control}
       name={name}
+      rules={rules}
       render={({
         field: { onChange, onBlur, value },
         fieldState: { error },

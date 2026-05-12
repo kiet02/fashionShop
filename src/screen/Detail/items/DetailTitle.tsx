@@ -2,8 +2,10 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { ProductDetail } from '../../../utils/fetchApi/type';
 import { AppText } from '../../../elements';
+import { useAppTheme } from '../../../utils/theme/useAppTheme';
 
 export function DetailTitle({ data }: { data: ProductDetail }) {
+  const { color } = useAppTheme();
   const { productName, price, sale, sold, rating } = data;
 
   const hasDiscount = sale > 0;
@@ -12,41 +14,41 @@ export function DetailTitle({ data }: { data: ProductDetail }) {
   const brand = data.categories?.find(c => c.type === 'brand')?.name ?? '';
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: color.card }]}>
       {/* GIÁ */}
       <View style={styles.priceRow}>
-        <AppText style={styles.price}>
+        <AppText style={[styles.price, { color: color.base }]}>
           {formatCurrency(discountedPrice)}
         </AppText>
         {hasDiscount && (
           <>
-            <AppText style={styles.originalPrice}>
+            <AppText style={[styles.originalPrice, { color: color.textSecondary }]}>
               {formatCurrency(price)}
             </AppText>
-            <View style={styles.discountBadge}>
-              <AppText style={styles.discountText}>-{sale}%</AppText>
+            <View style={[styles.discountBadge, { backgroundColor: color.base + '10', borderColor: color.base }]}>
+              <AppText style={[styles.discountText, { color: color.base }]}>-{sale}%</AppText>
             </View>
           </>
         )}
       </View>
 
       {/* TÊN SẢN PHẨM */}
-      <AppText style={styles.name} numberOfLines={3}>
+      <AppText style={[styles.name, { color: color.text }]} numberOfLines={3}>
         {productName}
       </AppText>
 
       {/* BRAND */}
       {!!brand && (
         <View style={styles.brandRow}>
-          <AppText style={styles.brandLabel}>Thương hiệu: </AppText>
-          <AppText style={styles.brandValue}>{brand.toUpperCase()}</AppText>
+          <AppText style={[styles.brandLabel, { color: color.textSecondary }]}>Thương hiệu: </AppText>
+          <AppText style={[styles.brandValue, { color: color.text }]}>{brand.toUpperCase()}</AppText>
         </View>
       )}
 
       {/* RATING + ĐÃ BÁN */}
       <View style={styles.metaRow}>
         <View style={styles.ratingWrapper}>
-          <AppText style={styles.ratingValue}>{rating.toFixed(1)}</AppText>
+          <AppText style={[styles.ratingValue, { color: color.base }]}>{rating.toFixed(1)}</AppText>
           <View style={styles.starsRow}>
             {Array.from({ length: 5 }).map((_, i) => {
               const filled = i < Math.floor(rating);
@@ -70,10 +72,10 @@ export function DetailTitle({ data }: { data: ProductDetail }) {
           </View>
         </View>
 
-        <View style={styles.divider} />
+        <View style={[styles.divider, { backgroundColor: color.border }]} />
 
-        <AppText style={styles.metaText}>
-          Đã bán <AppText style={styles.metaHighlight}>{formatCount(sold)}</AppText>
+        <AppText style={[styles.metaText, { color: color.textSecondary }]}>
+          Đã bán <AppText style={[styles.metaHighlight, { color: color.text }]}>{formatCount(sold)}</AppText>
         </AppText>
       </View>
     </View>
@@ -109,17 +111,13 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 22,
     fontWeight: '700',
-    color: '#EE4D2D',
   },
   originalPrice: {
     fontSize: 14,
-    color: '#999',
     textDecorationLine: 'line-through',
   },
   discountBadge: {
-    backgroundColor: '#FFF0ED',
     borderWidth: 1,
-    borderColor: '#EE4D2D',
     borderRadius: 4,
     paddingHorizontal: 6,
     paddingVertical: 2,
@@ -127,7 +125,6 @@ const styles = StyleSheet.create({
   discountText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#EE4D2D',
   },
   name: {
     fontSize: 15,
@@ -161,7 +158,6 @@ const styles = StyleSheet.create({
   ratingValue: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#EE4D2D',
     textDecorationLine: 'underline',
   },
   starsRow: {

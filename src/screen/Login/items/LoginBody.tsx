@@ -13,10 +13,13 @@ import { useAppTheme } from '../../../utils/theme/useAppTheme';
 import { fetchLogin } from '../../../utils/fetchApi';
 import { LoginFormData } from '../../../utils/fetchApi/type';
 
+import { useUser } from '../../../utils/user/UserContext';
+
 export function LoginBody() {
   const [showPassword, setShowPassword] = useState(false); // Renamed for clarity
   const { language } = useAppLanguage();
   const { color } = useAppTheme();
+  const { setUser } = useUser();
   const navigation = useNavigation<NavigationStackProps>();
 
   const { control, handleSubmit } = useForm<LoginFormData>({
@@ -30,6 +33,7 @@ export function LoginBody() {
   const onLogin = async (data: LoginFormData) => {
     const result = await fetchLogin(data.email, data.password);
     if (result) {
+      setUser({ ...result, email: data.email }); // Store user and email
       navigation.navigate('BottomNavigation');
       console.log('Login successful:', result);
     }

@@ -1,15 +1,16 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { ProductDetail } from '../../../utils/fetchApi/type';
+import { StyleSheet, View } from 'react-native';
+import { useAppTheme } from '../../../utils/theme/useAppTheme';
 import { AppText } from '../../../elements';
+import { ProductDetail } from '../../../utils/fetchApi/type';
 
 export function DetailDescription({ data }: { data: ProductDetail }) {
+  const { color } = useAppTheme();
   if (!data.description) return null;
 
   return (
-    <View style={styles.container}>
-      <AppText style={styles.title}>Mô tả sản phẩm</AppText>
-      <AppText style={styles.content}>
+    <View style={[styles.container, { backgroundColor: color.card }]}>
+      <AppText style={[styles.title, { color: color.text }]}>Mô tả sản phẩm</AppText>
+      <AppText style={[styles.content, { color: color.textSecondary }]}>
         {data.description}
       </AppText>
     </View>
@@ -20,17 +21,14 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 14,
     paddingVertical: 12,
-    backgroundColor: '#fff',
     gap: 12,
   },
   title: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1A1A1A',
   },
   content: {
     fontSize: 14,
     lineHeight: 22,
-    color: '#333',
   },
 });

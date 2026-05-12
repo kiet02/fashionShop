@@ -4,40 +4,59 @@ import { ScrollView, TouchableOpacity, View, StyleSheet } from 'react-native';
 import { AppText, AppIcon } from '../../../elements';
 import { useAppTheme } from '../../../utils/theme/useAppTheme';
 
+import { useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from '../../../navigation/type';
+
 const categories = [
-  { id: '1', name: 'Áo nam', icon: 'checkroom' },
-  { id: '2', name: 'Váy nữ', icon: 'accessibility' },
-  { id: '3', name: 'Giày dép', icon: 'ice-skating' },
-  { id: '4', name: 'Phụ kiện', icon: 'watch' },
-  { id: '5', name: 'Giảm giá', icon: 'sell' },
+  { id: '1', name: 'Áo nam', params: { category: 'clothing', gender: 'male' }, icon: 'checkroom' },
+  { id: '2', name: 'Váy nữ', params: { category: 'clothing', gender: 'female' }, icon: 'accessibility' },
+  { id: '3', name: 'Giày dép', params: { category: 'shoes' }, icon: 'ice-skating' },
+  { id: '4', name: 'Phụ kiện', params: { category: 'accessories' }, icon: 'watch' },
 ];
 
 export function HomeCategories() {
   const { color } = useAppTheme();
+  const navigation = useNavigation<RootStackParamList['Search']>();
+
+  const handlePress = (params: any) => {
+    navigation.navigate('Search', params);
+  };
 
   return (
-    <View style={{ marginVertical: 20 }}>
+    <View style={{ marginTop: 20 }}>
+      <View style={{ paddingHorizontal: 16, marginBottom: 12 }}>
+        <AppText
+          text="Danh mục"
+          style={{ fontSize: 16, fontWeight: '700', color: color.text }}
+        />
+      </View>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ paddingHorizontal: 16 }}
+        contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 4 }}
       >
         {categories.map(item => (
           <TouchableOpacity
             key={item.id}
             style={styles.categoryItem}
             activeOpacity={0.7}
+            onPress={() => handlePress(item.params)}
           >
             <View style={[styles.iconCircle, { backgroundColor: color.card }]}>
               <AppIcon
                 icon={{ type: 'MaterialIcons', name: item.icon as any }}
                 color={color.base}
-                size={28}
+                size={26}
               />
             </View>
             <AppText
               text={item.name}
-              style={{ fontSize: 12, color: color.text, marginTop: 8 }}
+              style={{
+                fontSize: 12,
+                color: color.textSecondary,
+                marginTop: 8,
+                fontWeight: '500',
+              }}
             />
           </TouchableOpacity>
         ))}

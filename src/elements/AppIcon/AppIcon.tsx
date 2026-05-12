@@ -1,5 +1,7 @@
 import React, { memo } from 'react';
-import { StyleProp, TouchableOpacity, ViewStyle } from 'react-native';
+import { StyleProp, TouchableOpacity, ViewStyle, View, StyleSheet } from 'react-native';
+import { AppText } from '../AppText';
+import { useAppTheme } from '../../utils/theme/useAppTheme';
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
@@ -46,6 +48,7 @@ interface AppIconProps {
   containerStyle?: StyleProp<ViewStyle>;
   iconStyle?: IconProps['style'];
   onPress?: () => void;
+  badge?: number;
 }
 
 export const AppIcon = memo(
@@ -56,7 +59,9 @@ export const AppIcon = memo(
     containerStyle,
     iconStyle,
     onPress,
+    badge = 0,
   }: AppIconProps) => {
+    const { color: themeColor } = useAppTheme();
     const IconComponent = IconSets[icon.type] as any;
 
     if (!IconComponent) return null;
@@ -64,7 +69,7 @@ export const AppIcon = memo(
     return (
       <TouchableOpacity
         testID="app-icon-touchable"
-        style={containerStyle}
+        style={[styles.container, containerStyle]}
         onPress={onPress}
         disabled={!onPress}
         activeOpacity={0.7}
@@ -75,7 +80,37 @@ export const AppIcon = memo(
           color={icon.color || color}
           style={icon.style || iconStyle || {}}
         />
+        {badge > 0 && (
+          <View style={[styles.badge, { backgroundColor: themeColor.accent }]}>
+            <AppText style={styles.badgeText}>{badge > 99 ? '99+' : badge}</AppText>
+          </View>
+        )}
       </TouchableOpacity>
     );
   },
 );
+
+const styles = StyleSheet.create({
+  container: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  badge: {
+    position: 'absolute',
+    top: -4,
+    right: -6,
+    minWidth: 16,
+    height: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 2,
+    zIndex: 1,
+  },
+  badgeText: {
+    color: '#FFFFFF',
+    fontSize: 9,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+});

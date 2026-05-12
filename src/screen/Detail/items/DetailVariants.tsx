@@ -2,15 +2,18 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { ProductItem } from '../../../utils/fetchApi/type';
 import { AppText } from '../../../elements';
+import { useAppTheme } from '../../../utils/theme/useAppTheme';
 
 interface Props {
   items: ProductItem[];
+  onVariantChange: (item: ProductItem | undefined) => void;
 }
 
-export function DetailVariants({ items }: Props) {
+export function DetailVariants({ items, onVariantChange }: Props) {
   const [selectedColor, setSelectedColor] = useState<string>('');
   const [selectedSize, setSelectedSize] = useState<string>('');
-
+  const { color } = useAppTheme();
+  
   const colors = useMemo(() => Array.from(new Set(items.map(i => i.color).filter(Boolean))), [items]);
   const sizes = useMemo(() => Array.from(new Set(items.map(i => i.size).filter(Boolean))), [items]);
 
@@ -21,48 +24,53 @@ export function DetailVariants({ items }: Props) {
 
   // Find the exact item combination to display stock
   const matchedItem = useMemo(() => {
-    return items.find(
-      i => (colors.length === 0 || i.color === selectedColor) && 
-           (sizes.length === 0 || i.size === selectedSize)
+    const item = items.find(
+      i => (colors.length === 0 || i.color === selectedColor) &&
+        (sizes.length === 0 || i.size === selectedSize)
     );
+    return item;
   }, [items, selectedColor, selectedSize, colors, sizes]);
+
+  useEffect(() => {
+    onVariantChange(matchedItem);
+  }, [matchedItem, onVariantChange]);
 
   if (colors.length === 0 && sizes.length === 0) {
     return null;
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: color.card }]}>
       {colors.length > 0 && (
         <View style={styles.section}>
           <View style={styles.titleRow}>
-            <AppText style={styles.title}>Màu sắc</AppText>
-            {!!selectedColor && <AppText style={styles.selectedValue}>{selectedColor}</AppText>}
+            <AppText style={[styles.title, { color: color.text }]}>Màu sắc</AppText>
+            {!!selectedColor && <AppText style={[styles.selectedValue, { color: color.textSecondary }]}>{selectedColor}</AppText>}
           </View>
           <View style={styles.optionsRow}>
-            {colors.map(color => (
+            {colors.map(c => (
               <TouchableOpacity
-                key={color}
+                key={c}
                 style={[
                   styles.colorCircleBtn,
-                  selectedColor === color && styles.colorCircleBtnSelected,
+                  { borderColor: selectedColor === c ? color.base : color.border },
                 ]}
-                onPress={() => setSelectedColor(color)}
+                onPress={() => setSelectedColor(c)}
               >
-                <View style={[styles.colorCircle, { backgroundColor: color.toLowerCase() }]} />
+                <View style={[styles.colorCircle, { backgroundColor: c.toLowerCase() }]} />
               </TouchableOpacity>
             ))}
           </View>
         </View>
       )}
 
-      {colors.length > 0 && sizes.length > 0 && <View style={styles.divider} />}
+      {colors.length > 0 && sizes.length > 0 && <View style={[styles.divider, { backgroundColor: color.border }]} />}
 
       {sizes.length > 0 && (
         <View style={styles.section}>
           <View style={styles.titleRow}>
-            <AppText style={styles.title}>Kích thước</AppText>
-            {!!selectedSize && <AppText style={styles.selectedValue}>{selectedSize}</AppText>}
+            <AppText style={[styles.title, { color: color.text }]}>Kích thước</AppText>
+            {!!selectedSize && <AppText style={[styles.selectedValue, { color: color.textSecondary }]}>{selectedSize}</AppText>}
           </View>
           <View style={styles.optionsRow}>
             {sizes.map(size => {
@@ -70,22 +78,25 @@ export function DetailVariants({ items }: Props) {
               const isAvailable = items.some(
                 i => i.size === size && (colors.length === 0 || i.color === selectedColor) && i.quantity > 0
               );
-              
+
               return (
                 <TouchableOpacity
                   key={size}
                   style={[
-                    styles.optionBtn, 
-                    selectedSize === size && styles.optionBtnSelected,
-                    !isAvailable && styles.optionBtnDisabled
+                    styles.optionBtn,
+                    {
+                      borderColor: selectedSize === size ? color.base : color.border,
+                      backgroundColor: selectedSize === size ? color.base + '10' : color.card
+                    },
+                    !isAvailable && { opacity: 0.4 }
                   ]}
                   onPress={() => setSelectedSize(size)}
                   disabled={!isAvailable}
                 >
                   <AppText style={[
-                    styles.optionText, 
-                    selectedSize === size && styles.optionTextSelected,
-                    !isAvailable && styles.optionTextDisabled
+                    styles.optionText,
+                    { color: selectedSize === size ? color.base : color.text },
+                    !isAvailable && { color: color.textSecondary }
                   ]}>
                     {size}
                   </AppText>
@@ -97,9 +108,9 @@ export function DetailVariants({ items }: Props) {
       )}
 
       {matchedItem && (
-        <View style={styles.stockRow}>
-          <AppText style={styles.stockText}>
-            Kho <AppText style={styles.stockValue}>{matchedItem.quantity}</AppText>
+        <View style={[styles.stockRow, { borderTopColor: color.border }]}>
+          <AppText style={[styles.stockText, { color: color.textSecondary }]}>
+            Kho <AppText style={[styles.stockValue, { color: color.text }]}>{matchedItem.quantity}</AppText>
           </AppText>
         </View>
       )}
@@ -111,7 +122,6 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 14,
     paddingVertical: 12,
-    backgroundColor: '#fff',
     gap: 16,
   },
   section: {
@@ -125,11 +135,9 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1A1A1A',
   },
   selectedValue: {
     fontSize: 13,
-    color: '#757575',
     fontWeight: '500',
   },
   optionsRow: {
@@ -142,27 +150,20 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: '#E0E0E0',
-    backgroundColor: '#FAFAFA',
   },
   optionBtnSelected: {
     borderColor: '#EE4D2D',
     backgroundColor: '#FFF0ED',
   },
   optionBtnDisabled: {
-    backgroundColor: '#F5F5F5',
-    borderColor: '#EEEEEE',
   },
   optionText: {
     fontSize: 13,
-    color: '#1A1A1A',
   },
   optionTextSelected: {
-    color: '#EE4D2D',
     fontWeight: '500',
   },
   optionTextDisabled: {
-    color: '#BDBDBD',
   },
   colorCircleBtn: {
     width: 36,
@@ -175,7 +176,6 @@ const styles = StyleSheet.create({
     padding: 2,
   },
   colorCircleBtnSelected: {
-    borderColor: '#EE4D2D',
   },
   colorCircle: {
     width: '100%',
@@ -200,7 +200,6 @@ const styles = StyleSheet.create({
     color: '#757575',
   },
   stockValue: {
-    color: '#1A1A1A',
     fontWeight: '500',
   },
 });

@@ -8,7 +8,8 @@ import {
 } from 'react-native';
 import { ProductInventoryItem } from '../../../utils/fetchApi/type';
 import { AppImage } from '../../../elements';
-import { SIZE } from '../../../utils';
+import { useAppTheme } from '../../../utils/theme/useAppTheme';
+import { no_image, SIZE } from '../../../utils';
 
 // Đặt ngoài component để tránh re-create mỗi render
 const VIEWABILITY_CONFIG = { itemVisiblePercentThreshold: 50 };
@@ -18,6 +19,7 @@ const THUMB_MARGIN = 8;
 const THUMB_BORDER = 2;
 
 export function DetailImage({ data }: { data: ProductInventoryItem[] }) {
+  const { color } = useAppTheme();
   const { width } = useWindowDimensions();
   const mainListRef = useRef<FlashListRef<ProductInventoryItem>>(null);
   const thumbListRef = useRef<FlashListRef<ProductInventoryItem>>(null);
@@ -56,9 +58,7 @@ export function DetailImage({ data }: { data: ProductInventoryItem[] }) {
           renderItem={({ item }) => (
             <View style={{ width, height: SIZE.HEIGHT_DP(45) }}>
               <AppImage
-                source={{
-                  uri: 'https://nads.1cdn.vn/2024/11/22/74da3f39-759b-4f08-8850-4c8f2937e81a-1_mangeshdes.png',
-                }}
+                source={item.productImage || no_image}
                 style={styles.mainImage}
                 resizeMode="cover"
               />
@@ -75,7 +75,8 @@ export function DetailImage({ data }: { data: ProductInventoryItem[] }) {
               key={i}
               style={[
                 styles.dot,
-                i === activeIndex ? styles.dotActive : styles.dotInactive,
+                { backgroundColor: i === activeIndex ? color.base : color.border },
+                i === activeIndex && styles.dotActive,
               ]}
             />
           ))}
@@ -97,13 +98,11 @@ export function DetailImage({ data }: { data: ProductInventoryItem[] }) {
               activeOpacity={0.8}
               style={[
                 styles.thumbItem,
-                index === activeIndex && styles.thumbItemActive,
+                index === activeIndex && { borderColor: color.base },
               ]}
             >
               <AppImage
-                source={{
-                  uri: 'https://nads.1cdn.vn/2024/11/22/74da3f39-759b-4f08-8850-4c8f2937e81a-1_mangeshdes.png',
-                }}
+                source={item.productImage || no_image}
                 style={styles.thumbImage}
                 resizeMode="cover"
               />

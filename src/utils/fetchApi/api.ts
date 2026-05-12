@@ -9,21 +9,20 @@ export const API = {
   ProductDetail: (id: number) => `api/v1/product/${id}`,
   Search: 'api/v1/product/filter',
   Related: (productId: number, userId?: number) =>
-    `/api/v1/product/related?product_id=${productId}${
-      userId ? `&user_id=${userId}` : ''
+    `api/v1/product/related?product_id=${productId}${userId ? `&user_id=${userId}` : ''
     }`,
-  Recommend: (productId: number) => `/api/v1/product/recommend/${productId}`,
-  Detail: (productId: number) => `/api/v1/product/${productId}`,
-  Reviews: (productId: number) => `/api/v1/product/review/${productId}`,
+  Recommend: (productId: number) => `api/v1/product/recommend/${productId}`,
+  Detail: (productId: number) => `api/v1/product/${productId}`,
+  Reviews: (productId: number) => `api/v1/product/review/${productId}`,
   UserReview: (productId: number, userId: number) =>
-    `/api/v1/product/review/${productId}/user/${userId}`,
-  CreateReview: () => `/api/v1/product/review/new`,
-  Item: (cartId: number) => `/api/v1/product/item/${cartId}`,
-  Image: (imageName: string) => `/api/v1/product/image/${imageName}`,
+    `api/v1/product/review/${productId}/user/${userId}`,
+  CreateReview: () => `api/v1/product/review/new`,
+  Item: (cartId: number) => `api/v1/product/item/${cartId}`,
+  Image: (imageName: string) => `api/v1/product/image/${imageName}`,
 
   //Account
   Account: (id: number) => `api/v1/user/${id}`,
-  FullInfo: (userId: number) => `/api/v1/user/${userId}/full`,
+  FullInfo: (userId: number) => `api/v1/user/${userId}/full`,
   UpdateAccount: (id: number) => `api/v1/user/update/${id}`,
   UpdateAddress: (id: number) => `api/v1/user/address/update/${id}`,
   ChangePassword: (id: number) => `api/v1/user/${id}/change-password`,
@@ -31,10 +30,10 @@ export const API = {
 
   //Cart
   Cart: (userId: number) => `api/v1/order/user/${userId}`,
-  CreateCart: () => `/api/v1/order/new`,
-  CancelCart: (orderId: number) => `/api/v1/order/cancel/${orderId}`,
+  CreateCart: () => `api/v1/order/new`,
+  CancelCart: (orderId: number) => `api/v1/order/cancel/${orderId}`,
   CheckBuyCart: (userId: number, productId: number) =>
-    `/api/v1/order/user/${userId}/check-buy/${productId}`,
+    `api/v1/order/user/${userId}/check-buy/${productId}`,
 };
 
 export const KEY_API = {
@@ -44,4 +43,7 @@ export const KEY_API = {
   Hot: 'hot-products',
   search: 'search',
   Detail: 'product-detail',
+  Payment: 'payment',
+  Orders: 'orders',
+  Reviews: 'product-reviews'
 };

@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import { AppButton, AppTextInput } from '../../../elements';
@@ -18,6 +19,7 @@ export function SearchHeader({
 }: SearchHeaderProps) {
   const { color } = useAppTheme();
   const [isVisible, setIsVisible] = useState(false);
+
 
   return (
     <View
@@ -42,7 +44,7 @@ export function SearchHeader({
         iconLeft={{ type: 'MaterialIcons', name: 'filter-alt' }}
         containerStyle={{
           backgroundColor: color.base,
-          width: 50, // Cố định chiều rộng nút filter để cân đối
+          width: 50,
           height: 50,
         }}
         onPress={() => setIsVisible(true)}

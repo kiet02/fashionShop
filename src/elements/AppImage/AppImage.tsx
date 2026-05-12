@@ -9,6 +9,8 @@ import {
   ImageSourcePropType,
 } from 'react-native';
 import { no_image } from '../../utils';
+import { LOCALHOST } from '@env';
+import { API } from '../../utils/fetchApi/api';
 
 interface AppImageProps extends ImageProps {
   style?: StyleProp<ImageStyle>;
@@ -32,10 +34,36 @@ export function AppImage({
   const resolvedSource: ImageSourcePropType = React.useMemo(() => {
     if (hasError) return no_image;
     if (!source) return no_image;
+    
+    const baseUrl = LOCALHOST || 'http://10.0.2.2:8080';
+
     if (typeof source === 'number') return source;
-    if (typeof source === 'object' && 'uri' in source && !source.uri)
-      return no_image;
-    return source;
+
+    if (typeof source === 'string') {
+      if (source.startsWith('http')) {
+        return { uri: source };
+      }
+      
+      // Handle relative paths from API
+      // If the path contains 'user', use user endpoint, otherwise default to product
+      const isUserImage = source.toLowerCase().includes('user') || source.startsWith('u_'); 
+      const endpoint = isUserImage ? 'api/v1/user/image' : 'api/v1/product/image';
+      
+      return { uri: `${baseUrl}/${endpoint}/${source}` };
+    }
+
+    if (typeof source === 'object' && 'uri' in source) {
+      const uri = (source as any).uri;
+      if (!uri) return no_image;
+      if (typeof uri === 'string' && !uri.startsWith('http')) {
+        const imagePath = uri.startsWith('/') ? uri : API.Image(uri);
+        const fullUrl = `${baseUrl}${imagePath.startsWith('/') ? '' : '/'}${imagePath}`;
+        return { ...source, uri: fullUrl };
+      }
+      return source as ImageSourcePropType;
+    }
+
+    return source as ImageSourcePropType;
   }, [source, hasError]);
 
   const ImageComponent = (

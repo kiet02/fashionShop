@@ -15,6 +15,7 @@ import {
   TextStyle,
 } from 'react-native';
 import { AppIcon, IconConfig } from '../AppIcon';
+import { useAppTheme } from '../../utils/theme/useAppTheme';
 
 type AppButtonProps =
   | ({ type: 'TouchableOpacity' } & TouchableOpacityProps)
@@ -49,8 +50,10 @@ export function AppButton(props: AppButtonProps & BaseProps) {
     ...rest
   } = props;
 
+  const { color } = useAppTheme();
   const combinedContainerStyle = StyleSheet.flatten([
     styles.defaultButton,
+    { backgroundColor: color.base },
     containerStyle,
   ]);
 
@@ -96,7 +99,6 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 8,
     paddingHorizontal: 16,
-    backgroundColor: '#007BFF',
   },
   innerWrapper: {
     flexDirection: 'row',
