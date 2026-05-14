@@ -4,14 +4,32 @@ import { ProductDetail } from '../../../utils/fetchApi/type';
 import { AppText } from '../../../elements';
 
 export function DetailDescription({ data }: { data: ProductDetail }) {
-  if (!data.description) return null;
+  if (!data.description && !data.productSummary) return null;
+
+  const cleanSummary = data.productSummary?.replace(/<[^>]*>?/gm, '') || '';
 
   return (
     <View style={styles.container}>
-      <AppText style={styles.title}>Mô tả sản phẩm</AppText>
-      <AppText style={styles.content}>
-        {data.description}
-      </AppText>
+      {!!data.productSummary && (
+        <View style={styles.section}>
+          <AppText style={styles.title}>Tóm tắt cấu hình</AppText>
+          <AppText style={styles.content}>{cleanSummary.trim()}</AppText>
+        </View>
+      )}
+
+      {!!data.warranty && (
+        <View style={styles.section}>
+          <AppText style={styles.title}>Bảo hành</AppText>
+          <AppText style={styles.content}>{data.warranty}</AppText>
+        </View>
+      )}
+
+      {!!data.description && (
+        <View style={styles.section}>
+          <AppText style={styles.title}>Mã mô tả / Chi tiết</AppText>
+          <AppText style={styles.content}>{data.description}</AppText>
+        </View>
+      )}
     </View>
   );
 }
@@ -21,12 +39,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 12,
     backgroundColor: '#fff',
-    gap: 12,
+    gap: 16,
+  },
+  section: {
+    gap: 6,
   },
   title: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#1A1A1A',
+    fontSize: 15,
+    fontWeight: 'bold',
+    color: '#002D5E',
   },
   content: {
     fontSize: 14,

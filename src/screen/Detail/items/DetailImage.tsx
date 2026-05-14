@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
-import { ProductInventoryItem } from '../../../utils/fetchApi/type';
+import { ProductImage } from '../../../utils/fetchApi/type';
 import { AppImage } from '../../../elements';
 import { SIZE } from '../../../utils';
 
@@ -17,10 +17,10 @@ const THUMB_SIZE = 64;
 const THUMB_MARGIN = 8;
 const THUMB_BORDER = 2;
 
-export function DetailImage({ data }: { data: ProductInventoryItem[] }) {
+export function DetailImage({ data }: { data: ProductImage[] }) {
   const { width } = useWindowDimensions();
-  const mainListRef = useRef<FlashListRef<ProductInventoryItem>>(null);
-  const thumbListRef = useRef<FlashListRef<ProductInventoryItem>>(null);
+  const mainListRef = useRef<FlashListRef<ProductImage>>(null);
+  const thumbListRef = useRef<FlashListRef<ProductImage>>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
   const onThumbPress = (index: number) => {
@@ -57,10 +57,10 @@ export function DetailImage({ data }: { data: ProductInventoryItem[] }) {
             <View style={{ width, height: SIZE.HEIGHT_DP(45) }}>
               <AppImage
                 source={{
-                  uri: 'https://nads.1cdn.vn/2024/11/22/74da3f39-759b-4f08-8850-4c8f2937e81a-1_mangeshdes.png',
+                  uri: item.large || item.small,
                 }}
                 style={styles.mainImage}
-                resizeMode="cover"
+                resizeMode="contain"
               />
             </View>
           )}
@@ -102,7 +102,7 @@ export function DetailImage({ data }: { data: ProductInventoryItem[] }) {
             >
               <AppImage
                 source={{
-                  uri: 'https://nads.1cdn.vn/2024/11/22/74da3f39-759b-4f08-8850-4c8f2937e81a-1_mangeshdes.png',
+                  uri: item.small,
                 }}
                 style={styles.thumbImage}
                 resizeMode="cover"
@@ -142,6 +142,24 @@ const styles = StyleSheet.create({
   },
   dotInactive: {
     backgroundColor: '#E0E0E0',
+  },
+  softwareIconsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 12,
+    marginTop: 16,
+    marginBottom: 4,
+  },
+  softwareIcon: {
+    width: 32,
+    height: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  softwareText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 14,
   },
   thumbWrapper: {
     height: THUMB_SIZE + THUMB_MARGIN * 2,

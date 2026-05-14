@@ -24,19 +24,30 @@ export interface BaseProduct {
   createAt: string | null;
   updateAt: string | null;
 }
+export interface ProductImage {
+  id?: number;
+  small: string;
+  large: string;
+  original?: string;
+}
+
 export interface ProductDetail {
+  specialOffer: never[];
   id: number;
   productName: string;
-  productImage: string;
-  price: number;
-  sale: number; // % giảm giá (0 = không giảm)
-  sold: number;
+  productSummary: string;
+  productUrl: string;
   description: string;
+  visit: number;
   rating: number;
-  categories: ProductCategory[];
-  items: ProductItem[];
-  createAt: string | null;
-  updateAt: string | null;
+  marketPrice: number;
+  price: number;
+  warranty: string;
+  status: string;
+  imageCollection: ProductImage[];
+  productImage: ProductImage;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface ProductCategory {

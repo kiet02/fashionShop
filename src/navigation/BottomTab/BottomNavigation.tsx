@@ -13,9 +13,11 @@ const Tab = createBottomTabNavigator<BottomTabParamList>();
 export function BottomNavigation() {
   const { color: themeColor } = useAppTheme();
   const { language } = useAppLanguage();
+  const { totalItems } = require('../../utils/hooks/useCart').useCart();
+
   return (
     <Tab.Navigator
-      screenOptions={({ route }) => ({
+      screenOptions={({ route, navigation }) => ({
         tabBarActiveTintColor: themeColor.primary,
         tabBarInactiveTintColor: themeColor.textSecondary,
         headerShown: route.name === 'Home' ? true : false,
@@ -40,8 +42,9 @@ export function BottomNavigation() {
             icon={{ type: 'MaterialIcons', name: 'shopping-cart' }}
             color="#FFFFFF"
             size={24}
+            badge={totalItems}
             containerStyle={{ marginRight: 16 }}
-            onPress={() => {}}
+            onPress={() => route.name === 'Home' && navigation.navigate('Cart' as any)}
           />
         ),
         tabBarStyle: {

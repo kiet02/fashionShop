@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unstable-nested-components */
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Login } from '../screen/Login';
+import { Login, Cart, PaymentWebView } from '../screen';
 import { Register } from '../screen/register/register';
 import { RootStackParamList } from './type';
 import { BottomNavigation } from './BottomTab/BottomNavigation';
@@ -33,22 +33,30 @@ export function NavigationStack() {
         <Stack.Screen
           name="Detail"
           component={Detail}
+        />
+        
+        <Stack.Screen
+          name="Cart"
+          component={Cart}
           options={{
-            headerTitle: '',
-            headerRight: () => {
-              return (
-                <AppIcon
-                  icon={{
-                    type: 'MaterialIcons',
-                    name: 'shopping-cart',
-                    size: 24,
-                    color: '#000000',
-                  }}
-                />
-              );
-            },
+            headerTitle: 'Giỏ hàng',
+            headerStyle: { backgroundColor: '#002D5E' },
+            headerTintColor: '#fff',
+            headerTitleAlign: 'center',
           }}
         />
+
+        <Stack.Screen
+          name="PaymentWebView"
+          component={PaymentWebView}
+          options={{
+            headerTitle: 'Thanh toán VNPay',
+            headerStyle: { backgroundColor: '#002D5E' },
+            headerTintColor: '#fff',
+            headerTitleAlign: 'center',
+          }}
+        />
+
       </Stack.Navigator>
     </NavigationContainer>
   );

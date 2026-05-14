@@ -2,9 +2,7 @@
 import { FlashList } from '@shopify/flash-list';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { SearchBodyCard } from './SearchBodyCard';
-import { useQuery } from '@tanstack/react-query';
-import { KEY_API } from '../../../utils/fetchApi/api';
-import { fetchProductsWithFilter } from '../../../utils/fetchApi';
+import { useSearchProducts } from '../../../utils/fetchApi';
 import { useFormContext } from 'react-hook-form';
 import { useDebounce } from '../modules/useDebounce';
 import { AppText } from '../../../elements';
@@ -15,19 +13,7 @@ export function SearchBody({ params }: { params: any }) {
   const searchKeyword = watch('search');
   const debouncedSearch = useDebounce(searchKeyword, 500);
 
-  const { data, isLoading } = useQuery({
-    queryKey: [KEY_API.search, debouncedSearch, params],
-    queryFn: () =>
-      fetchProductsWithFilter(
-        {
-          minPrice: params.minPrice,
-          maxPrice: params.maxPrice,
-          ...params.filter,
-        },
-        debouncedSearch,
-      ),
-    enabled: true,
-  });
+  const { data, isLoading } = useSearchProducts(debouncedSearch, params);
 
   if (isLoading) return <ActivityIndicator style={{ marginTop: 20 }} />;
 

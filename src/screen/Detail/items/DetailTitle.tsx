@@ -4,27 +4,27 @@ import { ProductDetail } from '../../../utils/fetchApi/type';
 import { AppText } from '../../../elements';
 
 export function DetailTitle({ data }: { data: ProductDetail }) {
-  const { productName, price, sale, sold, rating } = data;
+  const { productName, price, marketPrice, visit, rating } = data;
 
-  const hasDiscount = sale > 0;
-  const discountedPrice = hasDiscount ? price * (1 - sale / 100) : price;
-
-  const brand = data.categories?.find(c => c.type === 'brand')?.name ?? '';
+  const hasDiscount = marketPrice > price && marketPrice > 0;
+  const discountPercentage = hasDiscount 
+    ? Math.round(((marketPrice - price) / marketPrice) * 100) 
+    : 0;
 
   return (
     <View style={styles.container}>
       {/* GIÁ */}
       <View style={styles.priceRow}>
         <AppText style={styles.price}>
-          {formatCurrency(discountedPrice)}
+          {formatCurrency(price)}
         </AppText>
         {hasDiscount && (
           <>
             <AppText style={styles.originalPrice}>
-              {formatCurrency(price)}
+              {formatCurrency(marketPrice)}
             </AppText>
             <View style={styles.discountBadge}>
-              <AppText style={styles.discountText}>-{sale}%</AppText>
+              <AppText style={styles.discountText}>-{discountPercentage}%</AppText>
             </View>
           </>
         )}
@@ -35,15 +35,7 @@ export function DetailTitle({ data }: { data: ProductDetail }) {
         {productName}
       </AppText>
 
-      {/* BRAND */}
-      {!!brand && (
-        <View style={styles.brandRow}>
-          <AppText style={styles.brandLabel}>Thương hiệu: </AppText>
-          <AppText style={styles.brandValue}>{brand.toUpperCase()}</AppText>
-        </View>
-      )}
-
-      {/* RATING + ĐÃ BÁN */}
+      {/* RATING + ĐÃ BÁN/VIEW */}
       <View style={styles.metaRow}>
         <View style={styles.ratingWrapper}>
           <AppText style={styles.ratingValue}>{rating.toFixed(1)}</AppText>
@@ -73,7 +65,7 @@ export function DetailTitle({ data }: { data: ProductDetail }) {
         <View style={styles.divider} />
 
         <AppText style={styles.metaText}>
-          Đã bán <AppText style={styles.metaHighlight}>{formatCount(sold)}</AppText>
+          Lượt xem <AppText style={styles.metaHighlight}>{formatCount(visit)}</AppText>
         </AppText>
       </View>
     </View>

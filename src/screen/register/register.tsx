@@ -1,6 +1,4 @@
-/* eslint-disable react-native/no-inline-styles */
 import React, { useState } from 'react';
-
 import {
   View,
   Text,
@@ -18,6 +16,7 @@ import { useNavigation } from '@react-navigation/native';
 import { registerSchema, RegisterFormData } from '../../utils/helper/rule';
 import { SIZE } from '../../utils';
 import { RegisterTerms } from './items/registerTerms';
+import { useRegister } from '../../utils/fetchApi';
 
 export function Register() {
   const { color } = useAppTheme();
@@ -42,8 +41,18 @@ export function Register() {
     },
   });
 
+  const { mutate: register, isPending } = useRegister();
+
   const onRegister = (data: RegisterFormData) => {
-    console.log('Register Data:', data);
+    register(data, {
+      onSuccess: result => {
+        console.log('Register successful:', result);
+        navigation.navigate('Login');
+      },
+      onError: error => {
+        console.error('Register failed:', error);
+      },
+    });
   };
 
   return (
@@ -57,7 +66,7 @@ export function Register() {
       <AppText
         text={language.register.title || 'Đăng ký'}
         style={{
-          fontSize: SIZE.TITLE_L,
+          fontSize: SIZE.TEXT_TITLE_L,
           fontWeight: 'bold',
           marginBottom: 18,
           color: '#FFFFFF',
@@ -75,7 +84,6 @@ export function Register() {
           keyboardType="email-address"
           autoCapitalize="none"
           containerStyle={styles.fieldSpacing}
-          titleStyle={{ color: '#FFFFFF' }}
         />
 
         <AppTextInput
@@ -92,7 +100,6 @@ export function Register() {
           onPressIconRight={() => setShowPassword(!showPassword)}
           secureTextEntry={!showPassword}
           containerStyle={styles.fieldSpacing}
-          titleStyle={{ color: '#FFFFFF' }}
         />
 
         <AppTextInput
@@ -109,7 +116,6 @@ export function Register() {
           onPressIconRight={() => setShowConfirmPassword(!showConfirmPassword)}
           secureTextEntry={!showConfirmPassword}
           containerStyle={styles.fieldSpacing}
-          titleStyle={{ color: '#FFFFFF' }}
         />
 
         <RegisterTerms
@@ -120,7 +126,7 @@ export function Register() {
         <AppButton
           title={language.register.registerButton}
           onPress={handleSubmit(onRegister)}
-          disabled={!isValid || !acceptedTerms || isSubmitting}
+          disabled={!isValid || !acceptedTerms || isSubmitting || isPending}
           containerStyle={{
             width: SIZE.WIDTH_DP(100) - SIZE.MAR_L * 2,
             backgroundColor:

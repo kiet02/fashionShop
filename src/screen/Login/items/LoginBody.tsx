@@ -4,14 +4,12 @@ import { AppButton, AppTextInput } from '../../../elements';
 import { SIZE } from '../../../utils';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { getLoginSchema } from '../../../utils/helper/rule';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { useAppLanguage } from '../../../utils/language/useAppLanguage';
 import { NavigationStackProps } from '../../../navigation/type';
 import { useNavigation } from '@react-navigation/native';
 import { useAppTheme } from '../../../utils/theme/useAppTheme';
-import { fetchLogin } from '../../../utils/fetchApi';
-import { LoginFormData } from '../../../utils/fetchApi/type';
+import { useLogin } from '../../../utils/fetchApi';
+import { LoginFormData } from '../../../utils/helper/rule';
 
 export function LoginBody() {
   const [showPassword, setShowPassword] = useState(false); // Renamed for clarity
@@ -20,19 +18,29 @@ export function LoginBody() {
   const navigation = useNavigation<NavigationStackProps>();
 
   const { control, handleSubmit } = useForm<LoginFormData>({
-    // resolver: yupResolver(getLoginSchema(language)),
     defaultValues: {
-      email: 'hoang',
-      password: 'hoang',
+      email: 'computer_1@gmail.com',
+      password: '123123a',
     },
   });
 
-  const onLogin = async (data: LoginFormData) => {
-    const result = await fetchLogin(data.email, data.password);
-    if (result) {
-      navigation.navigate('BottomNavigation');
-      console.log('Login successful:', result);
-    }
+  const { mutate: login, isPending } = useLogin();
+
+  const onLogin = (data: LoginFormData) => {
+    login(data, {
+      onSuccess: result => {
+        // Save user info
+        import('../../../utils/mmkv/mmkv').then(({ storage }) => {
+          storage.set('userInfo', JSON.stringify(result));
+        });
+        navigation.navigate('BottomNavigation');
+        console.log('Login successful:', result);
+      },
+      onError: error => {
+        console.error('Login failed:', error);
+        // You can add an alert or error message here
+      },
+    });
   };
 
   const toRegister = () => {
@@ -66,6 +74,7 @@ export function LoginBody() {
       <AppButton
         title={language.login.loginButton}
         type="TouchableOpacity"
+        disabled={isPending}
         containerStyle={{
           backgroundColor: '#FFFFFF',
           marginTop: 10,

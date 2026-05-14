@@ -5,6 +5,8 @@ export type RootStackParamList = {
   Register: undefined;
   BottomNavigation: undefined;
   Detail: { id: number };
+  Cart: undefined;
+  PaymentWebView: { url: string; orderData?: any };
 };
 
 export type BottomTabParamList = {

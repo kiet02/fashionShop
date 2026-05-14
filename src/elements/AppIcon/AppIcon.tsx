@@ -46,6 +46,7 @@ interface AppIconProps {
   containerStyle?: StyleProp<ViewStyle>;
   iconStyle?: IconProps['style'];
   onPress?: () => void;
+  badge?: number | string;
 }
 
 export const AppIcon = memo(
@@ -56,6 +57,7 @@ export const AppIcon = memo(
     containerStyle,
     iconStyle,
     onPress,
+    badge,
   }: AppIconProps) => {
     const IconComponent = IconSets[icon.type] as any;
 
@@ -64,7 +66,7 @@ export const AppIcon = memo(
     return (
       <TouchableOpacity
         testID="app-icon-touchable"
-        style={containerStyle}
+        style={[containerStyle, { position: 'relative' }]}
         onPress={onPress}
         disabled={!onPress}
         activeOpacity={0.7}
@@ -75,7 +77,36 @@ export const AppIcon = memo(
           color={icon.color || color}
           style={icon.style || iconStyle || {}}
         />
+        {badge !== undefined && badge !== 0 && badge !== '' && (
+          <View style={styles.badgeContainer}>
+            <Text style={styles.badgeText}>{badge}</Text>
+          </View>
+        )}
       </TouchableOpacity>
     );
   },
 );
+
+import { StyleSheet, Text, View } from 'react-native';
+
+const styles = StyleSheet.create({
+  badgeContainer: {
+    position: 'absolute',
+    top: -4,
+    right: -4,
+    backgroundColor: '#EF4444',
+    borderRadius: 10,
+    minWidth: 16,
+    height: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 4,
+    borderWidth: 1,
+    borderColor: '#fff',
+  },
+  badgeText: {
+    color: '#fff',
+    fontSize: 9,
+    fontWeight: 'bold',
+  },
+});

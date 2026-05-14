@@ -1,47 +1,46 @@
+import { Platform } from 'react-native';
+
+export const BASE_URL =
+  Platform.OS === 'android' ? 'http://10.0.2.2:3000' : 'http://localhost:3000';
+
 export const API = {
-  //Login & Register
-  Login: 'api/v1/user/login',
-  Register: 'api/v1/user/signup',
+  // Auth
+  Login: 'api/auth/login',
+  Register: 'api/auth/register',
 
-  // Products
-  Products: 'api/v1/product',
-  Hot: 'api/v1/product/hot',
-  ProductDetail: (id: number) => `api/v1/product/${id}`,
-  Search: 'api/v1/product/filter',
-  Related: (productId: number, userId?: number) =>
-    `/api/v1/product/related?product_id=${productId}${
-      userId ? `&user_id=${userId}` : ''
-    }`,
-  Recommend: (productId: number) => `/api/v1/product/recommend/${productId}`,
-  Detail: (productId: number) => `/api/v1/product/${productId}`,
-  Reviews: (productId: number) => `/api/v1/product/review/${productId}`,
-  UserReview: (productId: number, userId: number) =>
-    `/api/v1/product/review/${productId}/user/${userId}`,
-  CreateReview: () => `/api/v1/product/review/new`,
-  Item: (cartId: number) => `/api/v1/product/item/${cartId}`,
-  Image: (imageName: string) => `/api/v1/product/image/${imageName}`,
+  // Product
+  ProductsAll: 'api/product-all',
+  ProductDetail: (id: string | number) => `api/product?productId=${id}`,
+  Search: 'api/search',
+  ProductCategory: 'api/product/category',
+  UpdateProduct: (id: string | number) => `api/product?productId=${id}`,
+  DeleteProduct: (id: string | number) => `api/product?productId=${id}`,
+  UpdateStatusProduct: 'api/status-product',
 
-  //Account
-  Account: (id: number) => `api/v1/user/${id}`,
-  FullInfo: (userId: number) => `/api/v1/user/${userId}/full`,
-  UpdateAccount: (id: number) => `api/v1/user/update/${id}`,
-  UpdateAddress: (id: number) => `api/v1/user/address/update/${id}`,
-  ChangePassword: (id: number) => `api/v1/user/${id}/change-password`,
-  AccountImage: (image: string) => `api/v1/user/image/${image}`,
+  // Order
+  Order: 'api/order',
+  UpdateOrder: (id: string | number) => `api/order?orderId=${id}`,
+  DeleteOrder: (id: string | number) => `api/order?orderId=${id}`,
 
-  //Cart
-  Cart: (userId: number) => `api/v1/order/user/${userId}`,
-  CreateCart: () => `/api/v1/order/new`,
-  CancelCart: (orderId: number) => `/api/v1/order/cancel/${orderId}`,
-  CheckBuyCart: (userId: number, productId: number) =>
-    `/api/v1/order/user/${userId}/check-buy/${productId}`,
+  // VNPay
+  VnpayCreatePayment: 'api/vnpay/create-payment',
+
+  // Other
+  CategoryBySlug: (slug: string) => `api/category?url=${slug}`,
+  Upload: 'api/upload',
+  Revenue: 'api/revenue',
+
+  // Keeping old ones if they are still needed elsewhere, but prioritizing new ones
+  Image: (imageName: string) => `api/v1/product/image/${imageName}`,
 };
 
 export const KEY_API = {
   Login: 'login',
   Register: 'register',
   Products: 'products',
-  Hot: 'hot-products',
-  search: 'search',
   Detail: 'product-detail',
+  Search: 'search',
+  Order: 'order',
+  Category: 'category',
+  Revenue: 'revenue',
 };

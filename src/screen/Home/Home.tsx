@@ -4,16 +4,11 @@ import { HomeBanner } from './items/HomeBanner';
 import { HomeCategories } from './items/HomeCategories';
 import { HomeBody } from './items/HomeBody';
 import { HomeFooter } from './items/HomeFooter';
-import { useQuery } from '@tanstack/react-query';
-import { KEY_API } from '../../utils/fetchApi/api';
-import { fetchProductsHot } from '../../utils/fetchApi';
+import { useProducts } from '../../utils/fetchApi';
 
 export function Home() {
   const { color } = useAppTheme();
-  const { data } = useQuery({
-    queryKey: [KEY_API.Hot],
-    queryFn: fetchProductsHot,
-  });
+  const { data } = useProducts();
 
   return (
     <ScrollView
