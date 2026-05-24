@@ -16,11 +16,16 @@ export function PaymentWebView() {
   const [loading, setLoading] = useState(true);
   const { mutate: createOrder, isPending } = useCreateOrder();
 
+  const processedRef = useRef(false);
+
   // We consider any url containing 'vnp_ResponseCode' as the return URL
   const handleNavigationStateChange = (navState: WebViewNavigation) => {
     const { url: currentUrl } = navState;
-    
+
     if (currentUrl.includes('vnp_ResponseCode')) {
+      if (processedRef.current) return;
+      processedRef.current = true;
+
       // Parse URL to get vnp_ResponseCode
       const regex = /[?&]vnp_ResponseCode=([^&#]*)/;
       const match = regex.exec(currentUrl);
@@ -42,6 +47,7 @@ export function PaymentWebView() {
               ]);
             },
             onError: (err) => {
+              processedRef.current = false; // Allow retry if creation failed
               Alert.alert('Lỗi', 'Thanh toán thành công nhưng không tạo được đơn hàng: ' + err.message);
             }
           });
@@ -70,14 +76,14 @@ export function PaymentWebView() {
 
   return (
     <View style={styles.container}>
-      <WebView 
-        source={{ uri: url }} 
-        style={styles.webview} 
+      <WebView
+        source={{ uri: url }}
+        style={styles.webview}
         onNavigationStateChange={handleNavigationStateChange}
         onLoadStart={() => setLoading(true)}
         onLoadEnd={() => setLoading(false)}
       />
-      { (loading || isPending) && (
+      {(loading || isPending) && (
         <View style={styles.loader}>
           <ActivityIndicator size="large" color="#002D5E" />
           {isPending && <AppText style={{ marginTop: 10 }}>Đang tạo đơn hàng...</AppText>}
@@ -91,7 +97,7 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff' },
   webview: { flex: 1 },
   loader: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
