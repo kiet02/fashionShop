@@ -33,6 +33,7 @@ export function HomeBodyCard({ data }: { data: BestProduct }) {
       <View>
         <AppImage
           source={data.productImage || no_image}
+          category={data.category?.category}
           style={{
             width: cardWidth,
             height: cardWidth,

@@ -1,4 +1,5 @@
-import { ScrollView, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet, ActivityIndicator, View } from 'react-native';
+import React from 'react';
 import { useAppTheme } from '../../utils/theme/useAppTheme';
 import { HomeBanner } from './items/HomeBanner';
 import { HomeCategories } from './items/HomeCategories';
@@ -8,15 +9,21 @@ import { useProducts } from '../../utils/fetchApi';
 
 export function Home() {
   const { color } = useAppTheme();
-  const { data } = useProducts();
+  const { data, isLoading } = useProducts();
 
   return (
     <ScrollView
       style={[styles.container, { backgroundColor: color.background }]}
     >
       <HomeBanner />
-      <HomeCategories />
-      <HomeBody data={data || []} />
+      {/* <HomeCategories /> */}
+      {isLoading ? (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 50 }}>
+          <ActivityIndicator size="large" color={color.primary} />
+        </View>
+      ) : (
+        <HomeBody data={data || []} />
+      )}
       <HomeFooter />
     </ScrollView>
   );

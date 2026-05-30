@@ -4,7 +4,7 @@ export const MOCK_PRODUCTS: BestProduct[] = [
   {
     id: 1,
     productName: 'PC Gaming Hoàng Hà - Intel Core i9 14900K',
-    productImage: 'https://hoanghapc.vn/media/product/250-7521-pc-gaming.jpg',
+    productImage: 'https://hoanghapc.vn/media/product/250_5101_pc_3301_tan_cooler_master_620s.jpg',
     price: 45000000,
     sold: 120,
     sale: 10,
@@ -22,7 +22,7 @@ export const MOCK_PRODUCTS: BestProduct[] = [
   {
     id: 2,
     productName: 'Card Màn Hình ASUS ROG Strix RTX 4090',
-    productImage: 'https://hoanghapc.vn/media/product/250-7500-vga-asus.jpg',
+    productImage: 'https://hoanghapc.vn/media/product/250_4521_hhpc_black_sky_4080_galax_ha1.jpg',
     price: 55000000,
     sold: 50,
     sale: 5,
@@ -40,7 +40,7 @@ export const MOCK_PRODUCTS: BestProduct[] = [
   {
     id: 3,
     productName: 'Màn Hình Samsung Odyssey G9 49 inch',
-    productImage: 'https://hoanghapc.vn/media/product/250-6800-monitor-samsung.jpg',
+    productImage: 'https://hoanghapc.vn/media/product/250_5026_talos_e3_mesh_elite_black_ha8.jpg',
     price: 35000000,
     sold: 30,
     sale: 15,
@@ -58,7 +58,7 @@ export const MOCK_PRODUCTS: BestProduct[] = [
   {
     id: 4,
     productName: 'Bàn Phím Cơ Razer BlackWidow V4 Pro',
-    productImage: 'https://hoanghapc.vn/media/product/250-7400-keyboard-razer.jpg',
+    productImage: 'https://hoanghapc.vn/media/product/250_3208_pc_gaming_sama_3301_hyper_212_ha2.jpg',
     price: 5000000,
     sold: 200,
     sale: 0,
@@ -78,7 +78,7 @@ export const MOCK_PRODUCTS: BestProduct[] = [
 export const MOCK_PRODUCT_DETAIL: ProductDetail = {
   id: 1,
   productName: 'PC Gaming Hoàng Hà - Intel Core i9 14900K',
-  productImage: 'https://hoanghapc.vn/media/product/250-7521-pc-gaming.jpg',
+  productImage: 'https://hoanghapc.vn/media/product/250_5101_pc_3301_tan_cooler_master_620s.jpg',
   price: 45000000,
   sale: 10,
   sold: 120,
@@ -93,7 +93,7 @@ export const MOCK_PRODUCT_DETAIL: ProductDetail = {
       id: 101,
       size: 'Standard',
       color: 'Black',
-      productImage: 'https://hoanghapc.vn/media/product/250-7521-pc-gaming.jpg',
+      productImage: 'https://hoanghapc.vn/media/product/250_5101_pc_3301_tan_cooler_master_620s.jpg',
       bonusPrice: 0,
       quantity: 10,
     },

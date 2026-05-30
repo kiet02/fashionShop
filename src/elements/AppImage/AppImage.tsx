@@ -10,9 +10,12 @@ import {
 } from 'react-native';
 import { no_image } from '../../utils';
 
+import { getFallbackImage } from '../../utils/fallbackImages';
+
 interface AppImageProps extends ImageProps {
   style?: StyleProp<ImageStyle>;
   onPress?: () => void;
+  category?: string;
 }
 
 export function AppImage({
@@ -20,6 +23,7 @@ export function AppImage({
   style,
   onPress,
   onError,
+  category,
   ...rest
 }: AppImageProps) {
   const [hasError, setHasError] = useState(false);
@@ -30,13 +34,33 @@ export function AppImage({
   }, [source]);
 
   const resolvedSource: ImageSourcePropType = React.useMemo(() => {
-    if (hasError) return no_image;
-    if (!source) return no_image;
+    const fallback = getFallbackImage(category);
+
+    if (hasError) return fallback;
+    if (!source) return fallback;
     if (typeof source === 'number') return source;
-    if (typeof source === 'object' && 'uri' in source && !source.uri)
-      return no_image;
-    return source;
-  }, [source, hasError]);
+
+    let uri = '';
+
+    if (typeof source === 'string') {
+      uri = source;
+    } else if (typeof source === 'object') {
+      if ('uri' in source && typeof source.uri === 'string') {
+        uri = source.uri;
+      } else if ('large' in source || 'small' in source || 'original' in source) {
+        // Handle ProductImage object from backend
+        const imgObj = source as any;
+        uri = imgObj.large || imgObj.original || imgObj.small || '';
+      }
+    }
+
+    if (!uri) return fallback;
+
+    // Fix SSL issue for old CDN domain
+    uri = uri.replace('hoanghapccdn.com', 'hoanghapc.vn');
+
+    return { uri };
+  }, [source, hasError, category]);
 
   const ImageComponent = (
     <Image

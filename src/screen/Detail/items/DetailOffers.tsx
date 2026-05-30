@@ -7,9 +7,9 @@ export function DetailOffers({ specialOffers }: { specialOffers?: any[] }) {
   const offers = specialOffers && specialOffers.length > 0
     ? specialOffers
     : [
-      { id: 1, text: 'Tặng ngay bộ phím chuột và bàn di chuột + 5 mét dây mạng khi mua cấu hình PC trên' },
-      { id: 2, text: 'Giảm ngay 100.000đ khi mua thêm Màn Hình Máy Tính.' },
-      { id: 3, text: 'Giảm ngay 200.000đ khi mua thêm RAM' },
+      { id: 1, title: 'Tặng ngay bộ phím chuột và bàn di chuột + 5 mét dây mạng khi mua cấu hình PC trên' },
+      { id: 2, title: 'Giảm ngay 100.000đ khi mua thêm Màn Hình Máy Tính.' },
+      { id: 3, title: 'Giảm ngay 200.000đ khi mua thêm RAM' },
     ];
 
   if (!offers || offers.length === 0) return null;
@@ -21,12 +21,19 @@ export function DetailOffers({ specialOffers }: { specialOffers?: any[] }) {
           <AppText style={styles.headerText}>Quà tặng và ưu đãi kèm theo</AppText>
         </View>
         <View style={styles.body}>
-          {offers.map((offer, index) => (
-            <View key={offer.id || index} style={styles.itemRow}>
-              <AppText style={styles.icon}>⭐</AppText>
-              <AppText style={styles.itemText}>{offer.text || offer}</AppText>
-            </View>
-          ))}
+          {offers.map((offer, index) => {
+            const rawValue = typeof offer === 'string' ? offer : (offer.title || offer.text || '');
+            const displayValue = rawValue.replace(/<[^>]+>/g, '').trim(); // Remove HTML tags
+            
+            if (!displayValue) return null;
+            
+            return (
+              <View key={offer.id || index} style={styles.itemRow}>
+                <AppText style={styles.icon}>⭐</AppText>
+                <AppText style={styles.itemText}>{displayValue}</AppText>
+              </View>
+            );
+          })}
         </View>
       </View>
     </View>
