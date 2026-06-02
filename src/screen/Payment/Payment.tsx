@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { View, ScrollView, StyleSheet, Alert, StatusBar } from 'react-native';
 import { useAppTheme } from '../../utils/theme/useAppTheme';
 import { SIZE } from '../../utils/responsive/size';
@@ -32,6 +32,8 @@ export function Payment() {
   const { cart, subtotal, totalItems, clearCart } = useCart();
   const { user } = useUser();
   const [selectedPayment, setSelectedPayment] = useState('cod');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const isSubmittingRef = useRef(false);
 
   const { setError, clearErrors, formState: { errors } } = useForm({
     values: {
@@ -50,18 +52,29 @@ export function Payment() {
   const total = subtotal + shippingFee;
 
   const handlePlaceOrder = async () => {
+    if (isSubmittingRef.current) return;
+    
+    isSubmittingRef.current = true;
+    setIsSubmitting(true);
+
     if (!user) {
+      isSubmittingRef.current = false;
+      setIsSubmitting(false);
       Alert.alert('Lỗi', 'Vui lòng đăng nhập để đặt hàng');
       return;
     }
 
     const hasAddress = user?.address?.street && user?.address?.city;
     if (!hasAddress) {
+      isSubmittingRef.current = false;
+      setIsSubmitting(false);
       setError('address', { message: 'Vui lòng cập nhật địa chỉ giao hàng để tiếp tục' });
       return;
     }
 
     if (cart.length === 0) {
+      isSubmittingRef.current = false;
+      setIsSubmitting(false);
       Alert.alert('Lỗi', 'Giỏ hàng trống');
       return;
     }
@@ -84,26 +97,37 @@ export function Payment() {
 
     try {
       const result = await fetchCreateOrder(orderData);
+      
       if (selectedPayment === 'vnpay' && result?.id) {
         const { paymentUrl } = await fetchCreatePaymentUrl(result.id);
         if (paymentUrl) {
+          clearCart();
           navigation.navigate('VNPay', { url: paymentUrl, orderId: result.id });
+          isSubmittingRef.current = false;
+          setIsSubmitting(false);
+        } else {
+          throw new Error('Không lấy được link thanh toán');
         }
-      } else {
+      } else if (result?.id) {
+        clearCart();
         Alert.alert(
           'Thành công',
           'Đặt hàng thành công! Đơn hàng của bạn đang được xử lý.',
           [{
             text: 'OK', onPress: () => {
-              clearCart();
               navigation.navigate('BottomNavigation');
             }
-          }]
+          }],
+          { cancelable: false }
         );
+      } else {
+        throw new Error('Không tạo được đơn hàng');
       }
     } catch (e) {
       console.error('Order failed:', e);
       Alert.alert('Lỗi', 'Đặt hàng thất bại. Vui lòng thử lại sau.');
+      isSubmittingRef.current = false;
+      setIsSubmitting(false);
     }
   };
 
@@ -159,6 +183,7 @@ export function Payment() {
         total={total}
         formatCurrency={formatCurrency}
         onPlaceOrder={handlePlaceOrder}
+        isSubmitting={isSubmitting}
       />
     </SafeAreaView>
   );

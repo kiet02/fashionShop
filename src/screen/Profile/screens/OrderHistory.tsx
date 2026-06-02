@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, View, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppText, AppIcon } from '../../../elements';
 import { useAppTheme } from '../../../utils/theme/useAppTheme';
@@ -24,7 +25,8 @@ export function OrderHistory() {
 
 
   const renderOrderItem = ({ item }: { item: any }) => {
-    const statusText = item.paymentStatus === 'PAID' ? 'Đã thanh toán' : 'Chưa thanh toán';
+    const isPaid = item.paymentStatus === 'PAID';
+    const statusText = isPaid ? 'Đã thanh toán' : 'Chưa thanh toán';
 
     return (
       <TouchableOpacity
@@ -33,8 +35,8 @@ export function OrderHistory() {
       >
         <View style={styles.orderHeader}>
           <AppText style={styles.orderId}>Đơn hàng #{item.id}</AppText>
-          <View style={[styles.statusBadge, { backgroundColor: item.paymentStatus === 'PAID' ? '#E8F5E9' : '#FFF3E0' }]}>
-            <AppText style={[styles.statusText, { color: item.paymentStatus === 'PAID' ? '#2E7D32' : '#E65100' }]}>
+          <View style={[styles.statusBadge, isPaid ? styles.badgePaid : styles.badgeUnpaid]}>
+            <AppText style={[styles.statusText, isPaid ? styles.textPaid : styles.textUnpaid]}>
               {statusText}
             </AppText>
           </View>
@@ -42,13 +44,13 @@ export function OrderHistory() {
 
         <View style={styles.orderInfo}>
           <AppText style={[styles.infoLabel, { color: color.textSecondary }]}>Ngày đặt:</AppText>
-          <AppText style={styles.infoValue}>{new Date(item.createAt).toLocaleDateString('vi-VN')}</AppText>
+          <AppText style={styles.infoValue}>{item.createAt ? new Date(item.createAt).toLocaleDateString('vi-VN') : ''}</AppText>
         </View>
 
         <View style={styles.orderInfo}>
           <AppText style={[styles.infoLabel, { color: color.textSecondary }]}>Tổng tiền:</AppText>
-          <AppText style={[styles.infoValue, { color: color.base, fontWeight: 'bold' }]}>
-            {formatCurrency(item.total)}
+          <AppText style={[styles.infoValueBold, { color: color.base }]}>
+            {formatCurrency(item.total || 0)}
           </AppText>
         </View>
 
@@ -67,7 +69,7 @@ export function OrderHistory() {
           <AppIcon icon={{ type: 'MaterialIcons', name: 'arrow-back' }} size={24} color={color.text} />
         </TouchableOpacity>
         <AppText style={styles.headerTitle}>Đơn hàng của tôi</AppText>
-        <View style={{ width: 24 }} />
+        <View style={styles.spacer} />
       </View>
 
       {isLoading ? (
@@ -75,10 +77,10 @@ export function OrderHistory() {
           <ActivityIndicator size="large" color={color.base} />
         </View>
       ) : (
-        <FlatList
-          data={orders}
+        <FlashList
+          data={Array.isArray(orders) ? orders : []}
           renderItem={renderOrderItem}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item) => item?.id?.toString() || Math.random().toString()}
           contentContainerStyle={styles.list}
           ListEmptyComponent={
             <View style={styles.empty}>
@@ -144,6 +146,18 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: 'bold',
   },
+  badgePaid: {
+    backgroundColor: '#E8F5E9',
+  },
+  badgeUnpaid: {
+    backgroundColor: '#FFF3E0',
+  },
+  textPaid: {
+    color: '#2E7D32',
+  },
+  textUnpaid: {
+    color: '#E65100',
+  },
   orderInfo: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -154,6 +168,13 @@ const styles = StyleSheet.create({
   },
   infoValue: {
     fontSize: 14,
+  },
+  infoValueBold: {
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  spacer: {
+    width: 24,
   },
   footer: {
     flexDirection: 'row',

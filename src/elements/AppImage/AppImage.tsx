@@ -34,21 +34,21 @@ export function AppImage({
   const resolvedSource: ImageSourcePropType = React.useMemo(() => {
     if (hasError) return no_image;
     if (!source) return no_image;
-    
+
     const baseUrl = LOCALHOST || 'http://10.0.2.2:8080';
 
     if (typeof source === 'number') return source;
 
     if (typeof source === 'string') {
-      if (source.startsWith('http')) {
+      if ((source).startsWith('http')) {
         return { uri: source };
       }
-      
+
       // Handle relative paths from API
       // If the path contains 'user', use user endpoint, otherwise default to product
-      const isUserImage = source.toLowerCase().includes('user') || source.startsWith('u_'); 
+      const isUserImage = source.toLowerCase().includes('user') || source.startsWith('u_');
       const endpoint = isUserImage ? 'api/v1/user/image' : 'api/v1/product/image';
-      
+
       return { uri: `${baseUrl}/${endpoint}/${source}` };
     }
 

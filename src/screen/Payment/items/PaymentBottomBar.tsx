@@ -9,9 +9,10 @@ interface PaymentBottomBarProps {
   total: number;
   formatCurrency: (value: number) => string;
   onPlaceOrder: () => void;
+  isSubmitting?: boolean;
 }
 
-export function PaymentBottomBar({ total, formatCurrency, onPlaceOrder }: PaymentBottomBarProps) {
+export function PaymentBottomBar({ total, formatCurrency, onPlaceOrder, isSubmitting }: PaymentBottomBarProps) {
   const { color } = useAppTheme();
 
   return (
@@ -32,10 +33,11 @@ export function PaymentBottomBar({ total, formatCurrency, onPlaceOrder }: Paymen
       </View>
       <AppButton
         title="Đặt hàng"
-        containerStyle={[styles.placeOrderBtn, { backgroundColor: color.base }]}
+        containerStyle={[styles.placeOrderBtn, { backgroundColor: isSubmitting ? color.border : color.base }]}
         titleStyle={styles.placeOrderText}
         iconRight={{ type: 'MaterialIcons', name: 'check-circle', color: color.background, size: 20 }}
         onPress={onPlaceOrder}
+        disabled={isSubmitting}
       />
     </View>
   );
