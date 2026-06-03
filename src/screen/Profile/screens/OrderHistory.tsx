@@ -25,8 +25,23 @@ export function OrderHistory() {
 
 
   const renderOrderItem = ({ item }: { item: any }) => {
-    const isPaid = item.paymentStatus === 'PAID';
-    const statusText = isPaid ? 'Đã thanh toán' : 'Chưa thanh toán';
+    let statusText = 'Chưa thanh toán';
+    let badgeStyle = styles.badgeUnpaid;
+    let textStyle = styles.textUnpaid;
+
+    if (item.paymentStatus === 'PAID') {
+      statusText = 'Đã hoàn thành';
+      badgeStyle = styles.badgeCompleted;
+      textStyle = styles.textCompleted;
+    } else if (item.paymentMethod === 'VNPAY') {
+      statusText = 'Đã thanh toán';
+      badgeStyle = styles.badgePaid;
+      textStyle = styles.textPaid;
+    } else {
+      statusText = 'Chưa thanh toán';
+      badgeStyle = styles.badgeUnpaid;
+      textStyle = styles.textUnpaid;
+    }
 
     return (
       <TouchableOpacity
@@ -35,8 +50,8 @@ export function OrderHistory() {
       >
         <View style={styles.orderHeader}>
           <AppText style={styles.orderId}>Đơn hàng #{item.id}</AppText>
-          <View style={[styles.statusBadge, isPaid ? styles.badgePaid : styles.badgeUnpaid]}>
-            <AppText style={[styles.statusText, isPaid ? styles.textPaid : styles.textUnpaid]}>
+          <View style={[styles.statusBadge, badgeStyle]}>
+            <AppText style={[styles.statusText, textStyle]}>
               {statusText}
             </AppText>
           </View>
@@ -147,16 +162,22 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   badgePaid: {
-    backgroundColor: '#E8F5E9',
+    backgroundColor: '#E3F2FD',
   },
   badgeUnpaid: {
     backgroundColor: '#FFF3E0',
   },
+  badgeCompleted: {
+    backgroundColor: '#E8F5E9',
+  },
   textPaid: {
-    color: '#2E7D32',
+    color: '#1565C0',
   },
   textUnpaid: {
     color: '#E65100',
+  },
+  textCompleted: {
+    color: '#2E7D32',
   },
   orderInfo: {
     flexDirection: 'row',

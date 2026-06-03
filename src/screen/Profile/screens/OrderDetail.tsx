@@ -73,7 +73,7 @@ export function OrderDetail() {
     queryKey: [KEY_API.Orders, orderId],
     queryFn: () => fetchOrderDetail(orderId),
   });
-
+  console.log("order", order);
 
   if (isLoading) {
     return (
@@ -109,8 +109,8 @@ export function OrderDetail() {
           </View>
           <View style={styles.row}>
             <AppText style={styles.label}>Trạng thái:</AppText>
-            <AppText style={[styles.value, { color: order.paymentStatus === 'PAID' ? '#2E7D32' : '#E65100', fontWeight: 'bold' }]}>
-              {order.paymentStatus === 'PAID' ? 'Đã thanh toán' : 'Chưa thanh toán'}
+            <AppText style={[styles.value, { color: order.paymentStatus === 'PAID' ? '#2E7D32' : order.paymentMethod === 'VNPAY' ? '#1565C0' : '#E65100', fontWeight: 'bold' }]}>
+              {order.paymentStatus === 'PAID' ? 'Đã hoàn thành' : order.paymentMethod === 'VNPAY' ? 'Đã thanh toán' : 'Chưa thanh toán'}
             </AppText>
           </View>
         </View>
